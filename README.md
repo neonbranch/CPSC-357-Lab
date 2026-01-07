@@ -182,15 +182,6 @@ This repository contains lab materials and resources organized by lab number:
 
 ---
 
-## Getting Started
-
-1. Complete the **Environment Setup Guide** (`lab1/Environment_Setup.md`)
-2. Create your first app using **Creating Your First App** (`lab1/createing first app.md`)
-3. Explore **Expo Commands** (`expo_command.md`) for common development tasks
-4. Review **What's Next** (`lab1/what is next.md`) for advanced topics
-
----
-
 ## Additional Resources
 
 - **Expo CLI Commands:** See `expo_command.md`

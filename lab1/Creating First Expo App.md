@@ -8,7 +8,7 @@ This guide walks you through creating and running your first Expo React Native a
 
 ## Step 1: Create a New Expo App
 ```
-npx create-expo-app@latest my-expo-app
+npx create-expo-app@latest my-expo-app --template blank
 cd my-expo-app
 ```
 
