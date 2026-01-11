@@ -680,5 +680,296 @@ const styles = StyleSheet.create({
 
 ---
 
+## Troubleshooting
+
+### Common Issues and Solutions
+
+#### Issue: SafeAreaView not working / Content hidden behind notch
+
+**Problem:** Content appears behind the device notch or status bar.
+
+**Solution:**
+1. **Ensure you're using the correct SafeAreaView:**
+   ```javascript
+   // ✅ Correct - Use from react-native-safe-area-context
+   import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+   
+   // ❌ Incorrect - Built-in SafeAreaView is deprecated
+   import { SafeAreaView } from 'react-native';
+   ```
+
+2. **Wrap your app with SafeAreaProvider:**
+   ```javascript
+   export default function App() {
+     return (
+       <SafeAreaProvider>
+         <SafeAreaView style={styles.container}>
+           {/* Your content */}
+         </SafeAreaView>
+       </SafeAreaProvider>
+     );
+   }
+   ```
+
+3. **If SafeAreaProvider is missing, install the package:**
+   ```bash
+   npx expo install react-native-safe-area-context
+   ```
+
+#### Issue: ScrollView/FlatList not scrolling
+
+**Problem:** List content is not scrollable.
+
+**Possible Causes & Solutions:**
+
+1. **Missing flex style on container:**
+   ```javascript
+   // ✅ Correct
+   <ScrollView style={{ flex: 1 }}>
+   
+   // ❌ Incorrect - Missing flex
+   <ScrollView style={{ height: '100%' }}>
+   ```
+
+2. **Content not tall enough - ScrollView requires content to exceed container height:**
+   - Ensure your content is actually taller than the screen
+   - Use `contentContainerStyle` with `flexGrow: 1` for minimum height
+   ```javascript
+   <ScrollView 
+     style={styles.container}
+     contentContainerStyle={{ flexGrow: 1 }}
+   >
+   ```
+
+3. **ScrollView nested inside View without flex:**
+   ```javascript
+   // ✅ Correct
+   <View style={{ flex: 1 }}>
+     <ScrollView style={{ flex: 1 }}>
+   ```
+
+#### Issue: FlatList warning: "VirtualizedLists should never be nested"
+
+**Problem:** Getting warning about nested FlatList or ScrollView containing FlatList.
+
+**Solution:**
+- **Don't nest FlatList inside ScrollView** - Use FlatList's `ListHeaderComponent` instead:
+  ```javascript
+  // ✅ Correct
+  <FlatList
+    data={data}
+    ListHeaderComponent={<Header />}
+    renderItem={renderItem}
+  />
+  
+  // ❌ Incorrect
+  <ScrollView>
+    <Header />
+    <FlatList data={data} renderItem={renderItem} />
+  </ScrollView>
+  ```
+
+- **If you need nested scrolling:** Use `nestedScrollEnabled={true}` (Android only, not recommended)
+
+#### Issue: FlatList not rendering items / Empty list
+
+**Problem:** FlatList shows nothing even though data exists.
+
+**Solutions:**
+
+1. **Check keyExtractor:**
+   ```javascript
+   // ✅ Correct - Unique key for each item
+   keyExtractor={(item) => item.id.toString()}
+   
+   // ❌ Incorrect - Missing or duplicate keys
+   keyExtractor={(item, index) => index}  // Avoid if data can change
+   ```
+
+2. **Check data format:**
+   ```javascript
+   // ✅ Correct - Array of objects
+   const data = [{ id: 1, title: 'Item' }];
+   
+   // ❌ Incorrect - Not an array
+   const data = { items: [...] };
+   ```
+
+3. **Verify renderItem returns a component:**
+   ```javascript
+   // ✅ Correct
+   renderItem={({ item }) => <Text>{item.title}</Text>}
+   
+   // ❌ Incorrect - Not returning a component
+   renderItem={({ item }) => item.title}
+   ```
+
+#### Issue: Styles not applying / Styling issues
+
+**Problem:** Styles don't appear to be working.
+
+**Solutions:**
+
+1. **Check property names - Use camelCase:**
+   ```javascript
+   // ✅ Correct
+   backgroundColor: '#fff'
+   fontSize: 16
+   
+   // ❌ Incorrect
+   background-color: '#fff'  // Won't work
+   font-size: 16              // Won't work
+   ```
+
+2. **Ensure StyleSheet.create is used:**
+   ```javascript
+   // ✅ Correct - Better performance
+   const styles = StyleSheet.create({ ... });
+   
+   // ⚠️ Works but not recommended - Inline styles
+   <View style={{ flex: 1 }}>
+   ```
+
+3. **Check for conflicting styles:**
+   - Styles are merged, later styles override earlier ones
+   - Use array syntax for conditional styles: `style={[styles.base, styles.conditional]}`
+
+#### Issue: Flexbox layout not working as expected
+
+**Problem:** Items not positioning correctly with Flexbox.
+
+**Solutions:**
+
+1. **Ensure parent has flex: 1:**
+   ```javascript
+   container: {
+     flex: 1,  // Required for flexbox to work properly
+     flexDirection: 'row',
+   }
+   ```
+
+2. **Check flexDirection:**
+   - Default is `'column'` (vertical)
+   - Use `'row'` for horizontal layouts
+
+3. **Common flexbox mistakes:**
+   ```javascript
+   // ✅ Correct - Items will be centered
+   container: {
+     flex: 1,
+     justifyContent: 'center',
+     alignItems: 'center',
+   }
+   
+   // ❌ Incorrect - Missing flex: 1
+   container: {
+     justifyContent: 'center',  // Won't work without flex
+   }
+   ```
+
+#### Issue: ActivityIndicator not showing / Always showing
+
+**Problem:** Loading indicator not displaying correctly.
+
+**Solutions:**
+
+1. **Check animating prop:**
+   ```javascript
+   // ✅ Correct
+   <ActivityIndicator animating={loading} />
+   
+   // ❌ Incorrect - Always animating
+   <ActivityIndicator animating={true} />
+   ```
+
+2. **Ensure ActivityIndicator is visible:**
+   - Check if it's behind other components (z-index)
+   - Verify parent container has proper layout
+
+3. **Size and color:**
+   ```javascript
+   <ActivityIndicator 
+     size="large"     // 'small' or 'large'
+     color="#007AFF"  // Make sure color is visible
+   />
+   ```
+
+#### Issue: Module not found errors
+
+**Problem:** Error like "Cannot find module 'react-native-safe-area-context'".
+
+**Solutions:**
+
+1. **Install missing dependencies:**
+   ```bash
+   npx expo install react-native-safe-area-context
+   ```
+
+2. **Clear cache and reinstall:**
+   ```bash
+   # Delete node_modules
+   rmdir /s /q node_modules  # Windows
+   # Or: rm -rf node_modules  # macOS/Linux
+   
+   # Reinstall
+   npm install
+   
+   # Clear Expo cache
+   npx expo start --clear
+   ```
+
+3. **Verify package.json:**
+   - Check that dependencies are listed in `package.json`
+   - Ensure you're in the correct directory
+
+#### Issue: Performance issues with long lists
+
+**Problem:** App becomes slow with many list items.
+
+**Solutions:**
+
+1. **Use FlatList instead of ScrollView:**
+   ```javascript
+   // ✅ Correct - Virtualized (efficient)
+   <FlatList data={data} renderItem={renderItem} />
+   
+   // ❌ Incorrect - Renders all items
+   <ScrollView>
+     {data.map(item => <Item key={item.id} />)}
+   </ScrollView>
+   ```
+
+2. **Optimize FlatList:**
+   ```javascript
+   <FlatList
+     data={data}
+     renderItem={renderItem}
+     keyExtractor={item => item.id.toString()}
+     initialNumToRender={10}        // Render fewer items initially
+     maxToRenderPerBatch={10}       // Batch size
+     windowSize={21}                // Viewport multiplier
+     removeClippedSubviews={true}   // Remove off-screen views
+   />
+   ```
+
+3. **Use React.memo for complex items:**
+   ```javascript
+   const ListItem = React.memo(({ item }) => {
+     return <View><Text>{item.title}</Text></View>;
+   });
+   ```
+
+### Getting Help
+
+If you encounter issues not covered here:
+
+1. **Check React Native Documentation:** https://reactnative.dev/docs/getting-started
+2. **Check Expo Documentation:** https://docs.expo.dev
+3. **Clear cache:** `npx expo start --clear`
+4. **Restart Metro bundler:** Stop (Ctrl+C) and restart `npx expo start`
+5. **Check console errors:** Look for specific error messages in the terminal or device console
+
+---
+
 *Last Updated: January 2026*
 

@@ -644,35 +644,6 @@ For drawer navigator, also install:
 npx expo install react-native-gesture-handler react-native-reanimated
 ```
 
-### Configuring Babel (Required for Drawer Navigator)
-
-If you're using the drawer navigator (which requires `react-native-reanimated`), you need to configure Babel by creating a `babel.config.js` file in your project root.
-
-**Create `babel.config.js` in the root of your project:**
-
-```javascript
-module.exports = function(api) {
-  api.cache(true);
-  return {
-    presets: ['babel-preset-expo'],
-    plugins: ['react-native-reanimated/plugin'],
-  };
-};
-```
-
-**Important Notes:**
-- The `react-native-reanimated/plugin` must be listed **last** in the plugins array
-- If you don't have a `babel.config.js` file, create one with the above configuration
-- After creating or modifying `babel.config.js`, you must restart your development server with cache cleared:
-  ```bash
-  npx expo start --clear
-  ```
-
-**Why is this needed?**
-- `react-native-reanimated` requires Babel transformations to work properly
-- The plugin processes code that enables smooth animations and gestures
-- Without proper Babel configuration, you'll encounter build/transformation errors
-
 ### Navigation Container
 
 All navigators must be wrapped in a `NavigationContainer`:
@@ -876,33 +847,96 @@ export default function App() {
 
 ### Combining Navigators (Nested Navigation)
 
-You can nest navigators to create complex navigation structures:
+You can nest navigators to create complex navigation structures. This is common in real-world apps where you might have:
+- A Stack Navigator for authentication flow
+- A Tab Navigator for main app sections
+- Stack Navigators within tabs for detailed navigation
+
+#### Example: Stack → Tab → Stack Navigation
 
 ```javascript
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+const ProfileStack = createNativeStackNavigator();
 
-// Tab navigator as a screen in stack
-function HomeTabs() {
+// Profile Stack Navigator (nested inside Tab)
+function ProfileStackNavigator() {
+  return (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+      <ProfileStack.Screen name="EditProfile" component={EditProfileScreen} />
+      <ProfileStack.Screen name="Settings" component={SettingsScreen} />
+    </ProfileStack.Navigator>
+  );
+}
+
+// Tab Navigator (nested inside Main Stack)
+function TabNavigator() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Feed" component={FeedScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Profile" component={ProfileStackNavigator} />
     </Tab.Navigator>
   );
 }
 
+// Main App with Stack Navigator
 export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="HomeTabs" component={HomeTabs} />
-        <Stack.Screen name="Details" component={DetailsScreen} />
+        <Stack.Screen 
+          name="Login" 
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen 
+          name="MainApp" 
+          component={TabNavigator}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 ```
+
+#### Navigation Structure
+
+```
+App (Stack Navigator)
+├── Login (Stack Screen)
+└── MainApp (Tab Navigator)
+    ├── Home (Tab Screen)
+    ├── Search (Tab Screen)
+    └── Profile (ProfileStack Navigator)
+        ├── Profile (Stack Screen)
+        ├── EditProfile (Stack Screen)
+        └── Settings (Stack Screen)
+```
+
+#### Navigating in Nested Navigators
+
+When navigating in nested navigators, you can use dot notation:
+
+```javascript
+// Navigate to a screen in nested stack
+navigation.navigate('Profile', {
+  screen: 'Settings',
+  params: { userId: 123 }
+});
+
+// Or navigate directly if you're in the same navigator
+navigation.navigate('EditProfile', { username: 'john' });
+```
+
+#### Best Practices for Nested Navigation
+
+1. **Keep it Simple**: Don't nest too deeply (2-3 levels is usually enough)
+2. **Clear Structure**: Each navigator should have a clear purpose
+3. **Header Management**: Use `headerShown: false` appropriately to avoid duplicate headers
+4. **Initial Routes**: Set `initialRouteName` for nested navigators when needed
+5. **Data Passing**: Use navigation params to pass data between screens in nested navigators
 
 ---
 
@@ -1049,130 +1083,14 @@ function EditScreen({ route, navigation }) {
 }
 ```
 
-### Complete Example: User List with Details
-
-```javascript
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-
-const Stack = createNativeStackNavigator();
-
-// Sample data
-const users = [
-  { id: 1, name: 'Alice', email: 'alice@example.com' },
-  { id: 2, name: 'Bob', email: 'bob@example.com' },
-  { id: 3, name: 'Charlie', email: 'charlie@example.com' },
-];
-
-// List Screen
-function UserListScreen({ navigation }) {
-  const renderItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.listItem}
-      onPress={() => navigation.navigate('UserDetails', { user: item })}
-    >
-      <Text style={styles.listItemText}>{item.name}</Text>
-      <Text style={styles.listItemSubtext}>{item.email}</Text>
-    </TouchableOpacity>
-  );
-
-  return (
-    <View style={styles.container}>
-      <FlatList
-        data={users}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-      />
-    </View>
-  );
-}
-
-// Details Screen
-function UserDetailsScreen({ route }) {
-  const { user } = route.params;
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>User Details</Text>
-      <View style={styles.detailsContainer}>
-        <Text style={styles.label}>Name:</Text>
-        <Text style={styles.value}>{user.name}</Text>
-        
-        <Text style={styles.label}>Email:</Text>
-        <Text style={styles.value}>{user.email}</Text>
-      </View>
-    </View>
-  );
-}
-
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen 
-          name="UserList" 
-          component={UserListScreen}
-          options={{ title: 'Users' }}
-        />
-        <Stack.Screen 
-          name="UserDetails" 
-          component={UserDetailsScreen}
-          options={{ title: 'User Details' }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    padding: 20,
-  },
-  listItem: {
-    padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  listItemText: {
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  listItemSubtext: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 4,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  detailsContainer: {
-    marginTop: 20,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginTop: 15,
-    marginBottom: 5,
-  },
-  value: {
-    fontSize: 16,
-    color: '#333',
-  },
-});
-```
-
 ### Best Practices for Navigation
 
 1. **Type Safety**: Use TypeScript or PropTypes for navigation params
 2. **Default Values**: Always provide default values for optional params
 3. **Deep Linking**: Consider deep linking when designing navigation structure
 4. **Performance**: Use React.memo for screens that re-render frequently
-5. **Navigation State**: Don't store large amounts of data in navigation params; use state management instead
+5. **Navigation State**: Don't store large amounts of data in navigation params; use state management libraries for complex global state
+6. **Params for Screen-Specific Data**: Use navigation params for data that's only needed by the target screen
 
 ---
 
@@ -1193,8 +1111,9 @@ This tutorial covered essential concepts for building interactive React Native a
 - Practice building forms with validation
 - Create a multi-screen app with navigation
 - Explore advanced navigation patterns (nested navigators)
-- Learn about React Context for global state management
+- Learn about other React hooks (useEffect, useCallback, useMemo)
 - Study React Navigation documentation: https://reactnavigation.org
+- Explore state management libraries (Redux, Zustand) for complex apps
 
 ## Additional Resources
 
@@ -1202,46 +1121,6 @@ This tutorial covered essential concepts for building interactive React Native a
 - [React Hooks Documentation](https://react.dev/reference/react)
 - [React Native TextInput](https://reactnative.dev/docs/textinput)
 - [React Native Touchable Components](https://reactnative.dev/docs/handling-touches)
+- [Safe Area Context](https://github.com/th3rdwave/react-native-safe-area-context)
 
 ---
-
-## Troubleshooting
-
-### "Cannot find module 'react-native-worklets/plugin'" Error
-
-If you encounter this error when bundling (especially on web), try these solutions in order:
-
-1. **Clear cache and restart:**
-   ```bash
-   npx expo start --clear
-   ```
-
-2. **Reinstall dependencies:**
-   ```bash
-   # Delete node_modules (on Windows: rmdir /s /q node_modules)
-   rm -rf node_modules
-   
-   # Reinstall dependencies
-   npm install
-   # Or: yarn install
-   
-   # Clear cache and restart
-   npx expo start --clear
-   ```
-
-3. **Reinstall react-native-reanimated with fix:**
-   ```bash
-   npx expo install react-native-reanimated --fix
-   npx expo start --clear
-   ```
-
-4. **If the error persists, ensure your babel.config.js is correct:**
-   - Use `'react-native-reanimated/plugin'` (not `'react-native-worklets/plugin'`)
-   - Make sure it's the **last** item in the plugins array
-   - Verify the file is in the project root directory
-
-5. **Note about react-native-reanimated:**
-   - For Expo projects, you should only use `react-native-reanimated/plugin` in your babel.config.js
-   - The worklets are handled internally by react-native-reanimated
-   - If you're using Stack Navigator only (not Drawer Navigator), you don't need react-native-reanimated at all
-   - Only install and configure react-native-reanimated if you're using Drawer Navigator
