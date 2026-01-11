@@ -1,5 +1,12 @@
 # Advanced Learning Topics
 
+## Foundation Resources
+
+- [MDN Web Docs](https://developer.mozilla.org/en-US/)
+- [JavaScript.info](https://javascript.info/)
+- [ECMAScript Specification](https://tc39.es/ecma262/)
+- [List of JavaScript Engines](https://en.wikipedia.org/wiki/List_of_JavaScript_engines)
+
 This guide provides links to advanced React Native topics for further learning.
 
 ## Topics Overview
@@ -17,6 +24,7 @@ This guide provides links to advanced React Native topics for further learning.
 | **JavaScript Environment** | Understand the JavaScript runtime environment in React Native and how it differs from web browsers | https://reactnative.dev/docs/javascript-environment |
 | **Hermes** | Learn about Hermes, the JavaScript engine optimized for React Native that improves app performance | https://reactnative.dev/docs/hermes |
 | **Native Platform** | Understand how React Native bridges JavaScript and native platform code (iOS/Android) | https://reactnative.dev/docs/native-platform |
+| **Fabric Renderer** | Learn about React Native's new rendering system that improves interoperability, performance, and enables React Concurrent Features | https://reactnative.dev/architecture/fabric-renderer |
 | **Versioning Policy** | Learn about React Native's versioning strategy, release cycle, and how to upgrade your app | https://reactnative.dev/docs/releases/versioning-policy |
 
 ---
@@ -39,4 +47,5 @@ This guide provides links to advanced React Native topics for further learning.
 - JavaScript Environment
 - Hermes
 - Native Platform
+- Fabric Renderer
 - Versioning Policy

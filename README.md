@@ -6,32 +6,6 @@ This course introduces modern mobile application development using React Native 
 
 **Capstone Project:** Students complete a React Native project developed through structured, sprint-based workflows.
 
----
-
-## Course Information
-
-### Instructor
-- **Dr. Sajal Saha**
-- **Office:** 10-2082, Teaching and Learning Centre
-- **Email:** sajal.saha@unbc.ca
-- **Phone:** 250-960-5866
-
-### Teaching Assistant
-- **Md Shariful Islam**
-- **Email:** islam5@unbc.ca
-- **Office Hour:** Monday 9AM - 10AM
-- **Office:** 10-2082
-
-### Schedule
-- **Lecture Times:** Tuesday and Thursday 4:00 PM – 5:20 PM
-- **Location:** 8-362
-- **Start Date:** January 8, 2026
-- **End Date:** April 13, 2026
-- **Holiday:** February 16
-- **Mid Semester Break:** February 17-20
-
----
-
 ## Course Materials
 
 ### Textbooks
@@ -45,47 +19,6 @@ This course introduces modern mobile application development using React Native 
 - **React Navigation:** https://reactnavigation.org
 - **Firebase Authentication:** https://firebase.google.com/docs/auth
 - **Expo EAS Build & Deploy:** https://docs.expo.dev/build/
-
----
-
-## Student Evaluation
-
-| Element | Purpose | Weight |
-|---------|---------|--------|
-| Assignment 1: Project Proposal | Propose a mobile application idea for semester development | 10% |
-| Assignment 2: Software Requirement Specification | Formally document what the app will do | 10% |
-| Assignment 3: Software Design Document | Define how the system will be built | 10% |
-| Project Presentation 1: Deliverable Set 1 | Sprint 1 milestone - foundation setup | 10% |
-| Project Presentation 2: Deliverable Set 2 | Sprint 2 milestone - functionality expansion | 15% |
-| Project Presentation 3: Deliverable Set 3 | Sprint 3 milestone - quality, testing, and security | 15% |
-| Final Presentation | Present the completed mobile application | 20% |
-| Final Report | Comprehensive technical report documenting the project lifecycle | 10% |
-| **Total** | | **100%** |
-
----
-
-## Assignment Schedule
-
-| Assignment # | Weight | Due Date (by 11:55 PM) |
-|--------------|--------|-------------------------|
-| 1 | 10% | January 18th |
-| 2 | 10% | February 1st |
-| 3 | 10% | February 15th |
-
-**Note:** All dates are tentative and will be confirmed when posted on MOODLE. Late assignments accepted up to 2 days with 20% penalty per day.
-
----
-
-## Presentation Schedule
-
-| Presentation # | Weight | Due Date |
-|----------------|--------|----------|
-| 1 | 10% | February 26th |
-| 2 | 15% | March 19th |
-| 3 | 15% | April 2nd |
-| Final Presentation | 20% | During final examination period |
-
-**Note:** All presentations are live, in-class demonstrations. Recorded videos or post-class demos are not accepted.
 
 ---
 
@@ -128,24 +61,6 @@ This course introduces modern mobile application development using React Native 
 ### Week 14: Project Review
 - Code review and feedback
 - Final project presentation preparation
-
----
-
-## Important Policies
-
-### Late Policy
-- Assignments accepted up to 2 days late with 20% penalty per day
-- Weekend counts as a single day
-- 11:55 PM is a hard deadline
-
-### Academic Integrity
-- Students must read and respect the University's academic dishonesty policy
-- Policy available at: https://www2.unbc.ca/sites/default/files/sections/anthropology/ugrad_regs_academic_offences.pdf
-
-### Email Contact
-- Course emails sent to UNBC email addresses
-- Students responsible for checking email regularly
-- Use UNBC email when contacting instructor
 
 ---
 

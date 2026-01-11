@@ -3,15 +3,6 @@
 This guide covers advanced topics for React Native development, including running apps on physical devices and core React Native concepts.
 
 **Prerequisites:** Complete the Environment Setup Guide and create your first app.
-
----
-
-## Running on Device
-
-Testing your app on a physical device is essential before releasing to users.
-
-For detailed instructions on running your React Native app on Android and iOS devices, refer to: https://reactnative.dev/docs/running-on-device
-
 ---
 
 ## Core React Native Concepts
@@ -163,26 +154,16 @@ function MyList() {
 }
 ```
 
-### Best Practices
 
-1. **Use Functional Components** - Modern React Native uses hooks, not class components
-2. **Optimize Images** - Use appropriate image sizes and formats
-3. **Handle Loading States** - Show loading indicators during async operations
-4. **Error Handling** - Implement proper error boundaries and error messages
-5. **Performance** - Use `FlatList` for long lists, avoid unnecessary re-renders
-6. **Accessibility** - Add accessibility labels and support screen readers
+## Running on Device
 
-### Next Steps
+Testing your app on a physical device is essential before releasing to users.
 
-- Explore React Native Components: https://reactnative.dev/docs/components-and-apis
-- Learn about React Native APIs: https://reactnative.dev/docs/accessibilityinfo
-- Build your first real app with navigation and state management
-- Learn about testing React Native apps
-- Study performance optimization techniques
+For detailed instructions on running your React Native app on Android and iOS devices, refer to: https://reactnative.dev/docs/running-on-device
 
 ---
 
-## Additional Resources
+## Resources
 
 - **React Native Documentation:** https://reactnative.dev/docs/getting-started
 - **React Native Components:** https://reactnative.dev/docs/components-and-apis
