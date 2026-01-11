@@ -8,9 +8,12 @@ import {
     Alert,
     ScrollView,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import LoginButton from '../components/LoginButton';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function LoginForm() {
+    const navigation = useNavigation();
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -31,11 +34,12 @@ export default function LoginForm() {
             return;
         }
         Alert.alert('Success', `Welcome, ${formData.email}!`);
+        navigation.navigate('HomeScreen');
         // Reset form
         setFormData({ email: '', password: '' });
     };
     return (
-        <ScrollView style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <Text style={styles.title}>Login</Text>
             <Text style={styles.label}>Email</Text>
             <TextInput
@@ -56,7 +60,7 @@ export default function LoginForm() {
             />
 
             <LoginButton onPress={handleSubmit} />
-        </ScrollView>
+        </SafeAreaView >
     );
 }
 

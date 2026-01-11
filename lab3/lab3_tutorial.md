@@ -673,41 +673,6 @@ module.exports = function(api) {
 - The plugin processes code that enables smooth animations and gestures
 - Without proper Babel configuration, you'll encounter build/transformation errors
 
-**Troubleshooting: "Cannot find module 'react-native-worklets/plugin'" Error**
-
-If you encounter this error when bundling (especially on web), try these solutions in order:
-
-1. **Clear cache and restart:**
-   ```bash
-   npx expo start --clear
-   ```
-
-2. **Reinstall dependencies:**
-   ```bash
-   # Delete node_modules (on Windows: rmdir /s /q node_modules)
-   rm -rf node_modules
-   
-   # Reinstall dependencies
-   npm install
-   # Or: yarn install
-   
-   # Clear cache and restart
-   npx expo start --clear
-   ```
-
-3. **Reinstall react-native-reanimated with fix:**
-   ```bash
-   npx expo install react-native-reanimated --fix
-   npx expo start --clear
-   ```
-
-4. **If the error persists, ensure your babel.config.js is correct:**
-   - Use `'react-native-reanimated/plugin'` (not `'react-native-worklets/plugin'`)
-   - Make sure it's the **last** item in the plugins array
-   - Verify the file is in the project root directory
-
-**Note:** For Expo projects, you should only use `react-native-reanimated/plugin` in your babel.config.js. The worklets are handled internally by react-native-reanimated.
-
 ### Navigation Container
 
 All navigators must be wrapped in a `NavigationContainer`:
@@ -1237,3 +1202,46 @@ This tutorial covered essential concepts for building interactive React Native a
 - [React Hooks Documentation](https://react.dev/reference/react)
 - [React Native TextInput](https://reactnative.dev/docs/textinput)
 - [React Native Touchable Components](https://reactnative.dev/docs/handling-touches)
+
+---
+
+## Troubleshooting
+
+### "Cannot find module 'react-native-worklets/plugin'" Error
+
+If you encounter this error when bundling (especially on web), try these solutions in order:
+
+1. **Clear cache and restart:**
+   ```bash
+   npx expo start --clear
+   ```
+
+2. **Reinstall dependencies:**
+   ```bash
+   # Delete node_modules (on Windows: rmdir /s /q node_modules)
+   rm -rf node_modules
+   
+   # Reinstall dependencies
+   npm install
+   # Or: yarn install
+   
+   # Clear cache and restart
+   npx expo start --clear
+   ```
+
+3. **Reinstall react-native-reanimated with fix:**
+   ```bash
+   npx expo install react-native-reanimated --fix
+   npx expo start --clear
+   ```
+
+4. **If the error persists, ensure your babel.config.js is correct:**
+   - Use `'react-native-reanimated/plugin'` (not `'react-native-worklets/plugin'`)
+   - Make sure it's the **last** item in the plugins array
+   - Verify the file is in the project root directory
+
+5. **Note about react-native-reanimated:**
+   - For Expo projects, you should only use `react-native-reanimated/plugin` in your babel.config.js
+   - The worklets are handled internally by react-native-reanimated
+   - If you're using Stack Navigator only (not Drawer Navigator), you don't need react-native-reanimated at all
+   - Only install and configure react-native-reanimated if you're using Drawer Navigator
