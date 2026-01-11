@@ -6,13 +6,12 @@ import {
     Button,
     StyleSheet,
     Alert,
-    ScrollView,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import LoginButton from '../components/LoginButton';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
-export default function LoginForm() {
+export default function LoginForm({ setUserEmail }) {
     const navigation = useNavigation();
     const [formData, setFormData] = useState({
         email: '',
@@ -34,33 +33,39 @@ export default function LoginForm() {
             return;
         }
         Alert.alert('Success', `Welcome, ${formData.email}!`);
-        navigation.navigate('HomeScreen');
+        // Set email in context
+        if (setUserEmail) {
+            setUserEmail(formData.email);
+        }
+        navigation.navigate('MainApp');
         // Reset form
         setFormData({ email: '', password: '' });
     };
     return (
-        <SafeAreaView style={styles.container}>
-            <Text style={styles.title}>Login</Text>
-            <Text style={styles.label}>Email</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Enter your email"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                value={formData.email}
-                onChangeText={(value) => handleInputChange('email', value)}
-            />
-            <Text style={styles.label}>Password</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Enter your password"
-                secureTextEntry={true}
-                value={formData.password}
-                onChangeText={(value) => handleInputChange('password', value)}
-            />
+        <SafeAreaProvider>
+            <SafeAreaView style={styles.container}>
+                <Text style={styles.title}>Login</Text>
+                <Text style={styles.label}>Email</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter your email"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    value={formData.email}
+                    onChangeText={(value) => handleInputChange('email', value)}
+                />
+                <Text style={styles.label}>Password</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter your password"
+                    secureTextEntry={true}
+                    value={formData.password}
+                    onChangeText={(value) => handleInputChange('password', value)}
+                />
 
-            <LoginButton onPress={handleSubmit} />
-        </SafeAreaView >
+                <LoginButton onPress={handleSubmit} />
+            </SafeAreaView >
+        </SafeAreaProvider>
     );
 }
 
