@@ -1124,3 +1124,210 @@ This tutorial covered essential concepts for building interactive React Native a
 - [Safe Area Context](https://github.com/th3rdwave/react-native-safe-area-context)
 
 ---
+
+## Troubleshooting Guide
+
+This section covers installation issues for Tab and Drawer Navigators.
+
+### Tab Navigator Installation Issues
+
+#### Problem: "Cannot find module '@react-navigation/bottom-tabs'"
+
+**Error Message:**
+```
+Error: Cannot find module '@react-navigation/bottom-tabs'
+```
+
+**Solutions:**
+
+1. **Install Tab Navigator Package:**
+   ```bash
+   npx expo install @react-navigation/bottom-tabs
+   ```
+
+2. **Verify Installation:**
+   ```bash
+   npm list @react-navigation/bottom-tabs
+   ```
+
+3. **Clear Cache and Restart:**
+   ```bash
+   npx expo start --clear
+   ```
+
+### Drawer Navigator Installation Issues
+
+#### Problem: "Cannot find module '@react-navigation/drawer'"
+
+**Error Message:**
+```
+Error: Cannot find module '@react-navigation/drawer'
+```
+
+**Solutions:**
+
+1. **Install Drawer Navigator Package:**
+   ```bash
+   npx expo install @react-navigation/drawer
+   ```
+
+2. **Install Required Dependencies:**
+   ```bash
+   npx expo install react-native-gesture-handler react-native-reanimated
+   ```
+
+3. **Verify Installation:**
+   ```bash
+   npm list @react-navigation/drawer
+   npm list react-native-gesture-handler
+   npm list react-native-reanimated
+   ```
+
+4. **Clear Cache and Restart:**
+   ```bash
+   npx expo start --clear
+   ```
+
+#### Problem: "Cannot find module 'react-native-reanimated'"
+
+**Error Message:**
+```
+Error: Cannot find module 'react-native-reanimated'
+```
+
+**Solutions:**
+
+1. **Install react-native-reanimated:**
+   ```bash
+   npx expo install react-native-reanimated
+   ```
+
+2. **Important:** Drawer Navigator requires a **Development Build**, not Expo Go:
+   ```bash
+   # Install dev client
+   npx expo install expo-dev-client
+   
+   # Create development build
+   npx expo run:android  # or npx expo run:ios
+   
+   # Start with dev client
+   npx expo start --dev-client
+   ```
+
+3. **Alternative:** Use Stack and Tab Navigators only (they work with Expo Go)
+
+#### Problem: "Cannot find module 'react-native-gesture-handler'"
+
+**Error Message:**
+```
+Error: Cannot find module 'react-native-gesture-handler'
+```
+
+**Solutions:**
+
+1. **Install react-native-gesture-handler:**
+   ```bash
+   npx expo install react-native-gesture-handler
+   ```
+
+2. **Add Import at Top of App.js:**
+   ```javascript
+   // Must be at the very top of your entry file (App.js)
+   import 'react-native-gesture-handler';
+   ```
+
+3. **Clear Cache and Restart:**
+   ```bash
+   npx expo start --clear
+   ```
+
+### Complete Installation Guide
+
+#### For Tab Navigator Only:
+
+```bash
+# Install core navigation
+npx expo install @react-navigation/native
+
+# Install Tab Navigator
+npx expo install @react-navigation/bottom-tabs
+
+# Install dependencies
+npx expo install react-native-screens react-native-safe-area-context
+```
+
+#### For Drawer Navigator:
+
+```bash
+# Install core navigation
+npx expo install @react-navigation/native
+
+# Install Drawer Navigator
+npx expo install @react-navigation/drawer
+
+# Install required dependencies
+npx expo install react-native-gesture-handler react-native-reanimated
+npx expo install react-native-screens react-native-safe-area-context
+
+# For Drawer, you need Development Build
+npx expo install expo-dev-client
+```
+
+### Quick Fixes for Installation Issues
+
+#### Problem: "Cannot find module" Errors
+
+**Error Messages:**
+```
+Error: Cannot find module '@react-navigation/bottom-tabs'
+Error: Cannot find module '@react-navigation/drawer'
+```
+
+**Solutions:**
+
+1. **Install Missing Packages:**
+   ```bash
+   # For Tab Navigator
+   npx expo install @react-navigation/bottom-tabs
+   
+   # For Drawer Navigator
+   npx expo install @react-navigation/drawer
+   npx expo install react-native-gesture-handler react-native-reanimated
+   ```
+
+### Quick Fixes for Installation Issues
+
+If you encounter installation problems:
+
+1. **Clear Cache and Reinstall:**
+   ```bash
+   npx expo start --clear
+   npm install
+   ```
+
+2. **Verify All Packages:**
+   ```bash
+   npm list @react-navigation/native
+   npm list @react-navigation/bottom-tabs
+   npm list @react-navigation/drawer
+   npm list react-native-gesture-handler
+   npm list react-native-reanimated
+   ```
+
+3. **Reinstall All Navigation Packages:**
+   ```bash
+   # Core navigation
+   npx expo install @react-navigation/native
+   
+   # Tab Navigator
+   npx expo install @react-navigation/bottom-tabs
+   
+   # Drawer Navigator (if needed)
+   npx expo install @react-navigation/drawer
+   npx expo install react-native-gesture-handler react-native-reanimated
+   
+   # Dependencies
+   npx expo install react-native-screens react-native-safe-area-context
+   ```
+
+---
