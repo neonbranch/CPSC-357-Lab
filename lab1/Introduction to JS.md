@@ -13,7 +13,7 @@
 
 The fundamental difference between JavaScript and Java lies in how they execute code:
 
-![JavaScript vs Java: Interpreter vs Compiler](./assets/js_vs_java.png)
+![JavaScript vs Java: Interpreter vs Compiler](./my-expo-app/assets/js_vs_java.png)
 
 ### Interpreter (JavaScript)
 
@@ -49,7 +49,7 @@ A **compiler** translates the entire source code **before execution**:
 
 ## ECMAScript: JavaScript Standard
 
-![ECMAScript Standard](./assets/ecma.png)
+![ECMAScript Standard](./my-expo-app/assets/ecma.png)
 
 ### Key Points:
 - **ECMAScript (ES)** is the official standard specification for JavaScript
