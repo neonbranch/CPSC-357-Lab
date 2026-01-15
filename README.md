@@ -72,37 +72,41 @@ This repository contains lab materials and resources organized by lab number:
 
 | Resource | Description | File Path |
 |----------|-------------|-----------|
-| Environment Setup Guide | Complete setup instructions for React Native development | `lab1/Environment_Setup.md` |
-| Creating Your First App | Step-by-step guide to build your first Expo app | `lab1/createing first app.md` |
-| What's Next | Advanced topics and core React Native concepts | `lab1/what is next.md` |
+| Creating Your First App | Step-by-step guide to build your first Expo app | `lab1/Creating First App.md` |
+| Introduction to JavaScript | JavaScript fundamentals for React Native development | `lab1/Introduction to JS.md` |
+| Introduction to React Native Components | Guide to core React Native components (View, Text, Image, etc.) | `lab1/Introduction to React Native Components.md` |
 
 ### Lab 2
 
 | Resource | Description | File Path |
 |----------|-------------|-----------|
-| *Coming Soon* | Lab 2 materials will be added here | - |
+| Lab 2 Tutorial | Building Instagram-like app with components and styling | `lab2/Lab_2_tutorial.md` |
 
 ### Lab 3
 
 | Resource | Description | File Path |
 |----------|-------------|-----------|
-| *Coming Soon* | Lab 3 materials will be added here | - |
+| Lab 3 Tutorial | Navigation and screen management tutorial | `lab3/lab3_tutorial.md` |
+
+### Lab 4
+
+| Resource | Description | File Path |
+|----------|-------------|-----------|
+| Lab 4 Tutorial | Advanced navigation with context and state management | `lab4/lab4_tutorial.md` |
 
 ### General Resources
 
 | Resource | Description | File Path |
 |----------|-------------|-----------|
-| Expo Commands | Common Expo CLI commands reference | `expo_command.md` |
-| Advanced Learning Topics | Links to advanced React Native documentation | `advance learning topics.md` |
+| Expo Commands | Common Expo CLI commands reference | `general/Basic expo commands.md` |
+| Advanced Learning Topics | Links to advanced React Native documentation | `general/Advance learning topics.md` |
 
 ---
 
 ## Additional Resources
 
-- **Expo CLI Commands:** See `expo_command.md`
-- **Advanced Topics:** See `advance learning topics.md`
+- **Expo CLI Commands:** See `general/Basic expo commands.md`
+- **Advanced Topics:** See `general/Advance learning topics.md`
 - **React Native Documentation:** https://reactnative.dev/docs/getting-started
-
----
-
-*Last Updated: January 2026*
+- **React Native Components:** https://reactnative.dev/docs/components-and-apis
+- **Expo Documentation:** https://docs.expo.dev
