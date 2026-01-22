@@ -11,7 +11,6 @@ This comprehensive tutorial covers essential React Native concepts for building 
 7. **Activity Indicator** - Loading states
 8. **Splash Screen** - App loading screens
 9. **ScrollView** - Scrollable content containers
-10. **SectionList** - Grouped/sectioned lists
 
 ---
 
@@ -31,7 +30,22 @@ React Native has many Core Components for everything from controls to activity i
 | `<ScrollView>` | `<ScrollView>` | `<UIScrollView>` | `<div>` | A generic scrolling container that can contain multiple components and views |
 | `<TextInput>` | `<EditText>` | `<UITextField>` | `<input type="text">` | Allows the user to enter text |
 
----
+### Important Note: Missing Built-in Components
+
+**React Native does not have built-in support for:**
+- ❌ **Radio buttons** - No `<Radio>` or `<RadioButton>` component
+- ❌ **Checkboxes** - No `<Checkbox>` component (except on Android with limited styling)
+- ❌ **Select/Dropdown** - No `<Select>` or `<Dropdown>` component
+
+**Solution:** You need to use **community libraries** or create custom components for these UI elements.
+
+**Popular Community Libraries:**
+- **react-native-paper** - Material Design components including Checkbox, RadioButton, and more
+- **react-native-elements** - UI toolkit with CheckBox and other components
+- **@react-native-community/picker** - For dropdown/select functionality
+- **react-native-check-box** - Standalone checkbox component
+- **react-native-radio-buttons-group** - Radio button group component
+
 
 ## React Native Architecture: Old vs New
 
@@ -1303,119 +1317,6 @@ const styles = StyleSheet.create({
 
 ---
 
-## 8. SectionList
-
-SectionList is optimized for rendering sectioned lists, similar to FlatList but with support for section headers and footers.
-
-### Basic SectionList
-
-```javascript
-import { SectionList, Text, View, StyleSheet } from 'react-native';
-
-const DATA = [
-  {
-    title: 'Fruits',
-    data: ['Apple', 'Banana', 'Orange'],
-  },
-  {
-    title: 'Vegetables',
-    data: ['Carrot', 'Broccoli', 'Spinach'],
-  },
-  {
-    title: 'Grains',
-    data: ['Rice', 'Wheat', 'Oats'],
-  },
-];
-
-export default function App() {
-  return (
-    <SectionList
-      sections={DATA}
-      keyExtractor={(item, index) => item + index}
-      renderItem={({ item }) => (
-        <View style={styles.item}>
-          <Text style={styles.itemText}>{item}</Text>
-        </View>
-      )}
-      renderSectionHeader={({ section: { title } }) => (
-        <View style={styles.header}>
-          <Text style={styles.headerText}>{title}</Text>
-        </View>
-      )}
-    />
-  );
-}
-
-const styles = StyleSheet.create({
-  item: {
-    padding: 15,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  itemText: {
-    fontSize: 16,
-    color: '#333',
-  },
-  header: {
-    padding: 10,
-    backgroundColor: '#f0f0f0',
-  },
-  headerText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-});
-```
-
-### SectionList with Footer
-
-```javascript
-<SectionList
-  sections={DATA}
-  keyExtractor={(item, index) => item + index}
-  renderItem={({ item }) => <Text>{item}</Text>}
-  renderSectionHeader={({ section: { title } }) => (
-    <Text style={styles.header}>{title}</Text>
-  )}
-  renderSectionFooter={({ section }) => (
-    <Text style={styles.footer}>{section.data.length} items</Text>
-  )}
-  ItemSeparatorComponent={() => <View style={styles.separator} />}
-  SectionSeparatorComponent={() => <View style={styles.sectionSeparator} />}
-/>
-```
-
-### SectionList Properties
-
-```javascript
-<SectionList
-  sections={sections}              // Array of section objects
-  renderItem={renderItem}          // Render function for items
-  renderSectionHeader={renderHeader} // Render function for headers
-  renderSectionFooter={renderFooter} // Render function for footers
-  keyExtractor={(item, index) => item.id}
-  
-  // Sticky headers
-  stickySectionHeadersEnabled={true}
-  
-  // Performance (same as FlatList)
-  initialNumToRender={10}
-  maxToRenderPerBatch={10}
-  
-  // Events
-  onEndReached={() => loadMore()}
-  onEndReachedThreshold={0.5}
-/>
-```
-
-### Reference Links
-
-- **SectionList Documentation:** https://reactnative.dev/docs/sectionlist
-- **SectionList Props:** https://reactnative.dev/docs/sectionlist#props
-
----
 
 ## Complete Example: Combining All Concepts
 
@@ -1539,7 +1440,6 @@ const styles = StyleSheet.create({
 |-----------|----------|-------------|
 | **ScrollView** | Small, simple lists | Renders all items |
 | **FlatList** | Large, dynamic lists | Virtualized (efficient) |
-| **SectionList** | Grouped/sectioned data | Virtualized |
 | **SafeAreaView** | Avoid device notches | Minimal overhead |
 | **ActivityIndicator** | Loading states | Lightweight |
 
