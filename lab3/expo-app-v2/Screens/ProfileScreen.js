@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Button, TouchableOpacity } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+import Avatar from '../components/avatar';
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
@@ -12,17 +12,24 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaProvider>
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <View style={styles.profileInfo}>
-          <Text style={styles.label}>Email:</Text>
-          <Text style={styles.value}>{email}</Text>
-        </View>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.content}>
+          <View style={styles.profileInfo}>
+            <Avatar
+              avatar="https://picsum.photos/400/400?random=1"
+              username="nature_lover"
+              name={email}
+            />
+            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', }}>
+              <Text style={styles.label}>Email:</Text>
+              <Text style={styles.value}>{email}</Text>
+            </View>
+          </View>
 
-       <Button title="Logout" onPress={() => navigation.navigate('Login')} />
-      </View>
-    </SafeAreaView>
-     </SafeAreaProvider>
+          <Button title="Logout" onPress={() => navigation.navigate('Login')} />
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
@@ -41,12 +48,11 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: '600',
-    marginBottom: 8,
     color: '#666',
+    marginRight: 10,
   },
   value: {
     fontSize: 18,
     color: '#333',
-    marginBottom: 20,
   },
 });
