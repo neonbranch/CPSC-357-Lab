@@ -11,35 +11,35 @@ import { useNavigation } from '@react-navigation/native';
 import LoginButton from '../components/LoginButton';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
-export default function LoginForm({ setUserEmail }) {
+export default function LoginForm() {
     const navigation = useNavigation();
-    const [formData, setFormData] = useState({
-        email: '',
-        password: '',
-    });
-    const handleInputChange = (field, value) => {
-        setFormData((prev) => ({
-            ...prev,
-            [field]: value,
-        }));
-    };
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    
     const handleSubmit = () => {
-        if (!formData.email || !formData.password) {
+        if (!email || !password) {
             Alert.alert('Error', 'Please fill in all fields');
             return;
         }
-        if (!formData.email.includes('@')) {
-            Alert.alert('Error', 'Please enter a valid email address');
+        // Length validation: min 5, max 20 characters
+        if (email.length < 5 || email.length > 20) {
+            Alert.alert('Error', 'Email must be between 5 and 20 characters');
             return;
         }
-        Alert.alert('Success', `Welcome, ${formData.email}!`);
-        // Set email in context
-        if (setUserEmail) {
-            setUserEmail(formData.email);
+        if (password.length < 5 || password.length > 20) {
+            Alert.alert('Error', 'Password must be between 5 and 20 characters');
+            return;
         }
-        navigation.navigate('MainApp');
+        //Assume: Loging is successfull
+        Alert.alert('Success', `Welcome, ${email}!`);
+        // Navigate to Home with email and loginStatus
+        navigation.navigate('Home', { 
+            email: email, 
+            loginStatus: true 
+        });
         // Reset form
-        setFormData({ email: '', password: '' });
+        setEmail('');
+        setPassword('');
     };
     return (
         <SafeAreaProvider>
@@ -51,16 +51,16 @@ export default function LoginForm({ setUserEmail }) {
                     placeholder="Enter your email"
                     keyboardType="email-address"
                     autoCapitalize="none"
-                    value={formData.email}
-                    onChangeText={(value) => handleInputChange('email', value)}
+                    value={email}
+                    onChangeText={setEmail}
                 />
                 <Text style={styles.label}>Password</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Enter your password"
                     secureTextEntry={true}
-                    value={formData.password}
-                    onChangeText={(value) => handleInputChange('password', value)}
+                    value={password}
+                    onChangeText={setPassword}
                 />
 
                 <LoginButton onPress={handleSubmit} />

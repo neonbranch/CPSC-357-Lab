@@ -7,22 +7,19 @@ export default function ProfileScreen() {
   const navigation = useNavigation();
   const route = useRoute();
 
-  // Get username from route params (passed from tab navigator)
-  const username = route.params?.username || 'User';
+  // Get email from route params
+  const email = route.params?.email || 'User';
 
   return (
     <SafeAreaProvider>
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <View style={styles.profileInfo}>
-          <Text style={styles.label}>Username:</Text>
-          <Text style={styles.value}>{username}</Text>
+          <Text style={styles.label}>Email:</Text>
+          <Text style={styles.value}>{email}</Text>
         </View>
 
-        <Button
-          title="Edit Profile"
-          onPress={() => navigation.navigate('EditProfile', { username })}
-        />
+       
       </View>
     </SafeAreaView>
      </SafeAreaProvider>

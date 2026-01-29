@@ -1,7 +1,7 @@
 import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function Avatar({ avatar, username, name, onMenuPress }) {
+export default function Avatar({ avatar, username, name }) {
     return (
         <View style={styles.avatarContainer}>
             <Image source={{ uri: avatar }} style={styles.avatar} />
@@ -9,7 +9,7 @@ export default function Avatar({ avatar, username, name, onMenuPress }) {
                 <Text style={styles.username}>{username}</Text>
                 {name && <Text style={styles.name}>{name}</Text>}
             </View>
-            <TouchableOpacity onPress={onMenuPress} style={styles.menuButton}>
+            <TouchableOpacity style={styles.menuButton}>
                 <Ionicons name="ellipsis-vertical" size={24} color="#000"
                     onPress={() => {
                         alert('Menu pressed');

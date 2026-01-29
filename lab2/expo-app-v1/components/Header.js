@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 
-export default function Header({ title = 'Insta App' }) {
+export default function Header({ title = 'CPSC 347' }) {
     return (
         <View style={styles.header}>
             <Text style={styles.title}>{title}</Text>
