@@ -19,7 +19,7 @@ export default function ProfileScreen() {
           <Text style={styles.value}>{email}</Text>
         </View>
 
-       
+       <Button title="Logout" onPress={() => navigation.navigate('Login')} />
       </View>
     </SafeAreaView>
      </SafeAreaProvider>
