@@ -24,15 +24,6 @@ export default function LogoutScreen() {
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.container}>
-                <View style={styles.headerWithMenu}>
-                    <Header title="Logout" />
-                    <TouchableOpacity 
-                        style={styles.menuButton}
-                        onPress={() => navigation.openDrawer()}
-                    >
-                        <Ionicons name="menu" size={28} color="#000" />
-                    </TouchableOpacity>
-                </View>
                 <View style={styles.content}>
                     <Text style={styles.text}>Are you sure you want to logout?</Text>
                     <Text style={styles.email}>Logged in as: {email}</Text>
@@ -49,15 +40,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-    },
-    headerWithMenu: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingRight: 15,
-    },
-    menuButton: {
-        padding: 5,
     },
     content: {
         flex: 1,

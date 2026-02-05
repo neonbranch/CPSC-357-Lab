@@ -1,7 +1,6 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
 import { useEmailStore } from '../contexts/EmailContext';
 import Header from '../components/Header';
 import { useCallback } from 'react';
@@ -17,19 +16,19 @@ export default function ProfileScreen() {
     }, [navigation])
   );
 
+  // Generate random avatar based on email for consistency
+  const avatarUrl = `https://i.pravatar.cc/250?u=${email || 'default'}`;
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-        <View style={styles.headerWithMenu}>
-          <Header title="Profile" />
-          <TouchableOpacity 
-            style={styles.menuButton}
-            onPress={() => navigation.openDrawer()}
-          >
-            <Ionicons name="menu" size={28} color="#000" />
-          </TouchableOpacity>
-        </View>
         <View style={styles.content}>
+          <View style={styles.avatarContainer}>
+            <Image
+              source={{ uri: avatarUrl }}
+              style={styles.avatar}
+            />
+          </View>
           <View style={styles.profileInfo}>
             <Text style={styles.label}>Email:</Text>
             <Text style={styles.value}>{email}</Text>
@@ -45,20 +44,24 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  headerWithMenu: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingRight: 15,
-  },
-  menuButton: {
-    padding: 5,
-  },
   content: {
     flex: 1,
     padding: 20,
+    alignItems: 'center',
+  },
+  avatarContainer: {
+    marginBottom: 30,
+    alignItems: 'center',
+  },
+  avatar: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    borderWidth: 3,
+    borderColor: '#006400',
   },
   profileInfo: {
+    width: '100%',
     marginBottom: 30,
   },
   label: {

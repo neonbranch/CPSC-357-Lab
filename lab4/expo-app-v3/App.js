@@ -25,7 +25,7 @@ function ProfileDrawerNavigator() {
       initialRouteName="ProfileMain"
       screenOptions={{
         drawerPosition: 'right',
-        headerShown: false,
+        headerShown: true,
         drawerStyle: { width: 250 },
         drawerType: 'front',
         overlayColor: 'transparent',

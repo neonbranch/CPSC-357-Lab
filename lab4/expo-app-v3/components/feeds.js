@@ -9,7 +9,7 @@ export default function AllFeeds({ feedData }) {
         <View style={styles.container}>
             {isScrolling && (
                 <View style={styles.loader}>
-                    <ActivityIndicator size="small" color="#007AFF" />
+                    <ActivityIndicator size="small" color="#006400" />
                 </View>
             )}
             <FlatList
