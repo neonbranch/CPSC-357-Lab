@@ -54,7 +54,7 @@ Run the Expo development server:
 npx expo start
 ```
 
-**Important:** This project uses Drawer Navigator which requires a **Development Build**. You cannot use Expo Go for this project.
+**Important:** This project uses Drawer Navigator which requires a **Development Build**. 
 
 To create a development build:
 ```bash
@@ -290,17 +290,22 @@ export const useEmailStore = () => {
 
 **File: `Screens/LoginScreen.js` (Setting email)**
 ```javascript
+import { useState } from 'react';
+import { View, TextInput } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useEmailStore } from '../contexts/EmailContext';
+import LoginButton from '../components/LoginButton';
 
 export default function LoginForm() {
   const navigation = useNavigation();
   const { setEmail } = useEmailStore();
   const [emailInput, setEmailInput] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleSubmit = () => {
     // Validation...
     if (!emailInput || !password) {
-      alert('Error', 'Please fill in all fields');
+      Alert.alert('Error', 'Please fill in all fields');
       return;
     }
     
@@ -317,25 +322,96 @@ export default function LoginForm() {
         onChangeText={setEmailInput}
         placeholder="Enter your email"
       />
-      <Button title="Login" onPress={handleSubmit} />
+      <TextInput
+        value={password}
+        onChangeText={setPassword}
+        placeholder="Enter your password"
+        secureTextEntry={true}
+      />
+      <LoginButton onPress={handleSubmit} />
     </View>
   );
 }
 ```
 
-**File: `Screens/ProfileScreen.js` (Reading email)**
+**Note:** The `LoginButton` component uses dark green (#006400) as the theme color for consistency across the app.
+
+**File: `Screens/ProfileScreen.js` (Reading email and displaying avatar)**
 ```javascript
+import { View, Text, StyleSheet, Image } from 'react-native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useEmailStore } from '../contexts/EmailContext';
+import { useCallback } from 'react';
 
 export default function ProfileScreen() {
+  const navigation = useNavigation();
   const { email } = useEmailStore();
 
+  // Close drawer when screen is focused
+  useFocusEffect(
+    useCallback(() => {
+      navigation.closeDrawer();
+    }, [navigation])
+  );
+
+  // Generate random avatar based on email
+  const avatarUrl = `https://i.pravatar.cc/250?u=${email || 'default'}`;
+
   return (
-    <View>
-      <Text>Email: {email}</Text>
-    </View>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.content}>
+          <View style={styles.avatarContainer}>
+            <Image
+              source={{ uri: avatarUrl }}
+              style={styles.avatar}
+            />
+          </View>
+          <View style={styles.profileInfo}>
+            <Text style={styles.label}>Email:</Text>
+            <Text style={styles.value}>{email}</Text>
+          </View>
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  content: {
+    flex: 1,
+    padding: 20,
+    alignItems: 'center',
+  },
+  avatarContainer: {
+    marginBottom: 30,
+  },
+  avatar: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    borderWidth: 3,
+    borderColor: '#006400', // Dark green theme
+  },
+  profileInfo: {
+    width: '100%',
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 8,
+    color: '#666',
+  },
+  value: {
+    fontSize: 18,
+    color: '#333',
+  },
+});
 ```
 
 ---
@@ -549,24 +625,36 @@ function ProfileDrawerNavigator() {
 }
 ```
 
-### Opening the Drawer Programmatically
+### Opening and Closing the Drawer
 
-To open the drawer from a button in your screen:
+**Opening the Drawer:**
+- **Swipe Gesture**: Users can swipe from the right edge of the screen to open the drawer
+- **Programmatically**: Use `navigation.openDrawer()` or `navigation.dispatch(DrawerActions.openDrawer())`
+
+**Closing the Drawer:**
+- **Swipe Back**: Users can swipe the drawer closed or tap outside
+- **Programmatically**: Use `navigation.closeDrawer()` or `navigation.dispatch(DrawerActions.closeDrawer())`
+- **Auto-close**: Use `useFocusEffect` to automatically close drawer when screen is focused
+
+**Example: Auto-close Drawer on Screen Focus**
 
 ```javascript
-import { DrawerActions } from '@react-navigation/native';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
 
-  const openDrawer = () => {
-    navigation.dispatch(DrawerActions.openDrawer());
-  };
+  // Close drawer automatically when screen is focused
+  useFocusEffect(
+    useCallback(() => {
+      navigation.closeDrawer();
+    }, [navigation])
+  );
 
   return (
     <View>
-      <Button title="Open Menu" onPress={openDrawer} />
+      {/* Screen content */}
     </View>
   );
 }
@@ -615,28 +703,99 @@ function ProfileDrawerNavigator() {
 - **No Header**: `headerShown: false` hides the default header
 - **Custom Width**: `drawerStyle: { width: 250 }` sets drawer width
 - **Multiple Screens**: Profile, Settings, and Logout screens in drawer
+- **Swipe Gesture**: Users can swipe from the right edge to open the drawer
 
-### Adding Drawer Icon to Header
+### Profile Screen Example with Avatar
 
-To add a menu icon in the Profile screen header that opens the drawer:
+The Profile screen displays user information with a random avatar:
 
 ```javascript
-// In App.js, when setting up the Drawer Navigator
-<Drawer.Navigator
-  screenOptions={({ navigation }) => ({
-    headerRight: () => (
-      <TouchableOpacity
-        style={{ marginRight: 15 }}
-        onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-      >
-        <Ionicons name="menu" size={28} color="#000" />
-      </TouchableOpacity>
-    ),
-  })}
->
-  {/* Screens */}
-</Drawer.Navigator>
+// Screens/ProfileScreen.js
+import { View, Text, StyleSheet, Image } from 'react-native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { useEmailStore } from '../contexts/EmailContext';
+import Header from '../components/Header';
+import { useCallback } from 'react';
+
+export default function ProfileScreen() {
+  const navigation = useNavigation();
+  const { email } = useEmailStore();
+
+  // Close drawer when screen is focused
+  useFocusEffect(
+    useCallback(() => {
+      navigation.closeDrawer();
+    }, [navigation])
+  );
+
+  // Generate random avatar based on email for consistency
+  const avatarUrl = `https://i.pravatar.cc/250?u=${email || 'default'}`;
+
+  return (
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.content}>
+          <View style={styles.avatarContainer}>
+            <Image
+              source={{ uri: avatarUrl }}
+              style={styles.avatar}
+            />
+          </View>
+          <View style={styles.profileInfo}>
+            <Text style={styles.label}>Email:</Text>
+            <Text style={styles.value}>{email}</Text>
+          </View>
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  content: {
+    flex: 1,
+    padding: 20,
+    alignItems: 'center',
+  },
+  avatarContainer: {
+    marginBottom: 30,
+    alignItems: 'center',
+  },
+  avatar: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    borderWidth: 3,
+    borderColor: '#006400', // Dark green theme color
+  },
+  profileInfo: {
+    width: '100%',
+    marginBottom: 30,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 8,
+    color: '#666',
+  },
+  value: {
+    fontSize: 18,
+    color: '#333',
+    marginBottom: 20,
+  },
+});
 ```
+
+**Key Features:**
+- **Random Avatar**: Uses `pravatar.cc` service to generate avatar based on email
+- **Dark Green Theme**: Avatar border uses dark green (#006400) matching app theme
+- **Auto-close Drawer**: `useFocusEffect` ensures drawer closes when Profile screen is focused
+- **Clean Layout**: Simple, centered layout with avatar and email display
 
 ---
 
@@ -764,8 +923,19 @@ App (EmailProvider)
 
 1. **Login Screen** → Sets email in Context using `setEmail(emailInput)`
 2. **All Screens** → Can access email using `const { email } = useEmailStore()`
-3. **Profile Screen** → Displays email from Context
+3. **Profile Screen** → Displays email from Context and generates avatar based on email
 4. **Navigation** → Bottom tabs for main navigation, Drawer for profile options
+5. **Drawer Access** → Users swipe from right edge to open drawer, drawer auto-closes when Profile screen is focused
+
+### Theme Colors
+
+The app uses **dark green (#006400)** as the primary theme color for:
+- Submit buttons (Login button)
+- Avatar borders
+- Loading indicators
+- Other primary UI elements
+
+This creates a consistent visual identity throughout the app.
 
 ---
 
@@ -785,6 +955,7 @@ This tutorial covered essential concepts for building complex React Native appli
 - Add more screens to the Drawer Navigator
 - Explore advanced navigation patterns
 
+
 ## Additional Resources
 
 - [React Context Documentation](https://react.dev/reference/react/createContext)
@@ -792,32 +963,5 @@ This tutorial covered essential concepts for building complex React Native appli
 - [React Navigation Drawer](https://reactnavigation.org/docs/drawer-navigator)
 - [Expo Vector Icons](https://docs.expo.dev/guides/icons/)
 
----
-
-## Lab Practice
-Create Registration Page with Navigation to Login
-
-Build a registration screen that links to your login page, allowing users to create an account first:
-
-**Requirements:**
-- **Registration Screen** with the following fields:
-  - Full Name (TextInput)
-  - Email (TextInput with email keyboard)
-  - Username (TextInput)
-  - Mobile Number (TextInput with phone keyboard)
-  - Password (TextInput with secureTextEntry)
-  - Confirm Password (TextInput with secureTextEntry)
-  - Submit Button
-- **Link to Login Page**: Add a button or text link on Login screen to navigate to Registration
-- **Return to Login**: After successful registration, navigate back to Login screen
 
 
-**Form Validation**: Validate all fields before submission
-
-**Validation Checklist:**
-- [ ] All fields must be filled (show error if any field is empty)
-- [ ] Email must be valid format (contains @ and domain)
-- [ ] Password and Confirm Password must match exactly
-- [ ] Password must be at least 6 characters long
-- [ ] Show appropriate error messages for each validation failure
-- [ ] Success message appears only when all validations pass
