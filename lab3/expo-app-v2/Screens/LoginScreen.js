@@ -5,7 +5,6 @@ import {
     TextInput,
     Button,
     StyleSheet,
-    Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import LoginButton from '../components/LoginButton';
@@ -18,20 +17,20 @@ export default function LoginForm() {
     
     const handleSubmit = () => {
         if (!email || !password) {
-            Alert.alert('Error', 'Please fill in all fields');
+            alert('Email or password cannot be empty');
             return;
         }
         // Length validation: min 5, max 20 characters
         if (email.length < 5 || email.length > 20) {
-            Alert.alert('Error', 'Email must be between 5 and 20 characters');
+            alert('Email must be between 5 and 20 characters');
             return;
         }
         if (password.length < 5 || password.length > 20) {
-            Alert.alert('Error', 'Password must be between 5 and 20 characters');
+            alert('Password must be between 5 and 20 characters');
             return;
         }
         //Assume: Loging is successfull
-        Alert.alert('Success', `Welcome, ${email}!`);
+        alert('Success', `Welcome, ${email}!`);
         // Navigate to Home with email and loginStatus
         navigation.navigate('Home', { 
             email: email, 

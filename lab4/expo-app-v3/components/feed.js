@@ -13,6 +13,11 @@ export default function Feed({ item }) {
             <View style={styles.textContainer}>
                 <Text style={styles.caption}>{item.caption}</Text>
                 <Text style={styles.text}>{item.text}</Text>
+                {item.datetime && (
+                    <Text style={styles.datetime}>
+                        {new Date(item.datetime).toLocaleString()}
+                    </Text>
+                )}
             </View>
         </View>
     );
@@ -39,5 +44,10 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 14,
         color: '#333',
+    },
+    datetime: {
+        fontSize: 12,
+        color: '#999',
+        marginTop: 8,
     },
 });

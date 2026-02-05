@@ -14,7 +14,7 @@ export default function HomeScreen() {
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.container}>
-                <Header title="Insta App" email={email} />
+                <Header title="UNBC" email={email} />
                 <Stories data={feedData} />
                 <AllFeeds feedData={feedData} />
                 <StatusBar style="auto" />

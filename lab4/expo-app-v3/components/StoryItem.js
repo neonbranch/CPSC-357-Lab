@@ -1,8 +1,8 @@
 import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-export default function StoryItem({ avatar, username, onPress }) {
+export default function StoryItem({ avatar, username }) {
     return (
-        <TouchableOpacity style={styles.storyItem} onPress={onPress}>
+        <TouchableOpacity style={styles.storyItem}>
             <View style={styles.avatarContainer}>
                 <Image source={{ uri: avatar }} style={styles.avatar} />
             </View>
