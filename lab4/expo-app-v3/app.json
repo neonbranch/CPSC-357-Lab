@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "instagram-app",
-    "slug": "instagram-app",
-    "version": "2.0.0",
+    "name": "unbc-app",
+    "slug": "unbc-app",
+    "version": "3.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
