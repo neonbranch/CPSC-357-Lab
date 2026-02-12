@@ -6,7 +6,7 @@ import LogoutScreen from '../Screens/LogoutScreen';
 
 const Drawer = createDrawerNavigator();
 
-function ProfileDrawerNavigator() {
+export default function ProfileDrawerNavigator() {
   return (
     <Drawer.Navigator
       initialRouteName="ProfileMain"
@@ -31,5 +31,3 @@ function ProfileDrawerNavigator() {
     </Drawer.Navigator>
   );
 }
-
-export default ProfileDrawerNavigator;

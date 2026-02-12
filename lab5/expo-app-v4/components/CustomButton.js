@@ -1,5 +1,6 @@
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
-export default function LoginButton({ onPress, text = 'Login' }) {
+
+export default function CustomButton({ onPress, title = 'Button' }) {
     const handlePress = () => onPress();
     
     return (
@@ -8,10 +9,11 @@ export default function LoginButton({ onPress, text = 'Login' }) {
             onPress={handlePress}
             activeOpacity={0.7}
         >
-            <Text style={styles.buttonText}>{text}</Text>
+            <Text style={styles.buttonText}>{title}</Text>
         </TouchableOpacity>
     );
 }
+
 const styles = StyleSheet.create({
     button: {
         marginTop: 20,

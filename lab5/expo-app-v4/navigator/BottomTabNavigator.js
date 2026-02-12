@@ -9,7 +9,7 @@ import ProfileDrawerNavigator from './ProfileDrawerNavigator';
 
 const Tab = createBottomTabNavigator();
 
-function BottomTabNavigator() {
+export default function BottomTabNavigator() {
   const iconMap = {
     Home: ['home', 'home-outline'],
     Search: ['search', 'search-outline'],
@@ -35,5 +35,3 @@ function BottomTabNavigator() {
     </Tab.Navigator>
   );
 }
-
-export default BottomTabNavigator;
