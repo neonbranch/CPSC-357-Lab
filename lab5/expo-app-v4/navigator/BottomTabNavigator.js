@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import HomeScreen from '../Screens/HomeScreen';
 import SearchScreen from '../Screens/SearchScreen';
-import AddScreen from '../Screens/AddScreen';
+import PostScreen from '../Screens/PostScreen';
 import ActivityScreen from '../Screens/ActivityScreen';
 import ProfileDrawerNavigator from './ProfileDrawerNavigator';
 
@@ -29,7 +29,7 @@ export default function BottomTabNavigator() {
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Search" component={SearchScreen} />
-      <Tab.Screen name="Add" component={AddScreen} />
+      <Tab.Screen name="Add" component={PostScreen}  options={{title: 'Post'}}/>
       <Tab.Screen name="Activity" component={ActivityScreen} />
       <Tab.Screen name="Profile" component={ProfileDrawerNavigator} />
     </Tab.Navigator>

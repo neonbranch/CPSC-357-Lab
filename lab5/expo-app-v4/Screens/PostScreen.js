@@ -6,7 +6,7 @@ import Header from '../components/Header';
 import Camera from '../components/camera';
 import CustomButton from '../components/CustomButton';
 
-export default function AddScreen() {
+export default function PostScreen() {
     const [postText, setPostText] = useState('');
     const [selectedImage, setSelectedImage] = useState(null);
     const [showCamera, setShowCamera] = useState(false);
@@ -28,6 +28,7 @@ export default function AddScreen() {
         });
 
         console.log(result.assets[0]);
+        //setPostText(result.assets[0].fileName || 'Untitled');
 
         if (!result.canceled) {
             setSelectedImage(result.assets[0].uri);

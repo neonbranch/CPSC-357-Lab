@@ -52,7 +52,11 @@ export default function Camera({ onPhotoTaken }) {
                 facing={facing}
                 ref={cameraRef}
                 style={styles.camera}
-            
+                // zoom={4.0}
+                // flash='on'
+                // enableTorch={true}
+                // active={true}
+                // ratio='1:1'
             />
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
