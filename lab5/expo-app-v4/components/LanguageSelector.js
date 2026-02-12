@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderRadius: 8,
         borderWidth: 1,
+        marginTop: 10,
     },
     languageLabel: {
         fontSize: 16,

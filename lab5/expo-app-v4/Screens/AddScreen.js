@@ -27,6 +27,8 @@ export default function AddScreen() {
             quality: 1,
         });
 
+        console.log(result.assets[0]);
+
         if (!result.canceled) {
             setSelectedImage(result.assets[0].uri);
         }

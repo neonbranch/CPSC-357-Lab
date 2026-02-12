@@ -90,13 +90,13 @@ export default function LoginForm() {
                     title="Create Account" 
                 />
 
-                <Text style={styles.copyright}>© {new Date().getFullYear()} UNBC. All rights reserved.</Text>
-
                 <LanguageSelector 
                     currentLanguage={language}
                     onLanguageChange={setLanguage}
                     label="Language"
                 />
+
+                <Text style={styles.copyright}>© {new Date().getFullYear()} UNBC. All rights reserved.</Text>
 
                
             </SafeAreaView >
