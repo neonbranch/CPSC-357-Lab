@@ -1,8 +1,9 @@
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useState, useRef } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-export default function Camera() {
+export default function Camera({ onPhotoTaken }) {
   const [facing, setFacing] = useState('back');
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef(null);
@@ -30,10 +31,14 @@ export default function Camera() {
     if (cameraRef.current) {
       try {
         const photo = await cameraRef.current.takePictureAsync();
-        Alert.alert('Success', 'Picture taken successfully!', [
-          { text: 'OK' }
-        ]);
-        console.log('Photo URI:', photo.uri);
+        if (onPhotoTaken) {
+          onPhotoTaken(photo.uri);
+        } else {
+          Alert.alert('Success', 'Picture taken successfully!', [
+            { text: 'OK' }
+          ]);
+          console.log('Photo URI:', photo.uri);
+        }
       } catch (error) {
         Alert.alert('Error', 'Failed to take picture');
         console.error('Error taking picture:', error);
@@ -50,11 +55,15 @@ export default function Camera() {
       />
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
+          <Ionicons name="camera-reverse" size={28} color="white" />
           <Text style={styles.text}>Flip Camera</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.captureButton} onPress={takePicture}>
-          <View style={styles.captureButtonInner} />
-        </TouchableOpacity>
+        <View style={styles.captureContainer}>
+          <TouchableOpacity style={styles.captureButton} onPress={takePicture}>
+            <View style={styles.captureButtonInner} />
+          </TouchableOpacity>
+          <Text style={styles.captureText}>Take Picture</Text>
+        </View>
       </View>
     </View>
   );
@@ -85,15 +94,19 @@ const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     padding: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
   },
   text: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 14,
+    fontWeight: '600',
     color: 'white',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    paddingHorizontal: 15,
-    paddingVertical: 8,
-    borderRadius: 8,
+    marginTop: 4,
+  },
+  captureContainer: {
+    alignItems: 'center',
   },
   captureButton: {
     width: 70,
@@ -104,11 +117,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 4,
     borderColor: 'rgba(255, 255, 255, 0.5)',
+    marginBottom: 8,
   },
   captureButtonInner: {
     width: 60,
     height: 60,
     borderRadius: 30,
     backgroundColor: 'white',
+  },
+  captureText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: 'white',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 6,
   },
 });
