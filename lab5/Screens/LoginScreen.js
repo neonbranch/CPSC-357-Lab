@@ -3,14 +3,17 @@ import {
     View,
     Text,
     TextInput,
-    Button,
     StyleSheet,
     Image,
+    TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 import LoginButton from '../components/LoginButton';
+import LanguageSelector from '../components/LanguageSelector';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useEmailStore } from '../contexts/EmailContext';
+import { getTranslation } from '../utils/translations';
 
 const alert = (title, message) => {
     if (typeof window !== 'undefined' && window.alert) {
@@ -21,21 +24,22 @@ const alert = (title, message) => {
 export default function LoginForm() {
     const navigation = useNavigation();
     const { setEmail } = useEmailStore();
+    const language = useSelector((state) => state.language.language);
     const [emailInput, setEmailInput] = useState('');
     const [password, setPassword] = useState('');
+
+    const t = (key, params = {}) => getTranslation(key, language, params);
 
     const handleSubmit = () => {
         if (!emailInput || !password) {
             alert('Error', 'Please fill in all fields');
             return;
         }
-        // Simple email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(emailInput)) {
             alert('Error', 'Please enter a valid email address');
             return;
         }
-        // Length validation: min 5, max 20 characters
         if (emailInput.length < 5 || emailInput.length > 20) {
             alert('Error', 'Email must be between 5 and 20 characters');
             return;
@@ -44,24 +48,24 @@ export default function LoginForm() {
             alert('Error', 'Password must be between 5 and 20 characters');
             return;
         }
-        //Assume: Loging is successfull
-        alert('Success', `Welcome, ${emailInput}!`);
-        // Save email to context
+        alert('Success', t('welcome', { email: emailInput }));
         setEmail(emailInput);
-        // Navigate to MainTabs (bottom tab navigator)
         navigation.navigate('MainTabs');
-        // Reset form
         setEmailInput('');
         setPassword('');
     };
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.container}>
+                <View style={styles.languageContainer}>
+                    <LanguageSelector />
+                </View>
+
                 <View style={styles.titleContainer}>
                     <Image source={require('../assets/UNBC.jpg')} style={styles.logo} resizeMode="contain" />
-                    <Text style={styles.title}>Login</Text>
+                    <Text style={styles.title}>{t('login')}</Text>
                 </View>
-                <Text style={styles.label}>Email</Text>
+                <Text style={styles.label}>{t('email')}</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Enter your email"
@@ -70,7 +74,7 @@ export default function LoginForm() {
                     value={emailInput}
                     onChangeText={setEmailInput}
                 />
-                <Text style={styles.label}>Password</Text>
+                <Text style={styles.label}>{t('password')}</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Enter your password"
@@ -83,7 +87,13 @@ export default function LoginForm() {
 
                 <Text style={styles.orText}>OR</Text>
 
-                <Button title="Create Account" onPress={() => navigation.navigate('CreateAccount')} />
+                <TouchableOpacity 
+                    style={styles.createAccountButton}
+                    onPress={() => navigation.navigate('CreateAccount')}
+                    activeOpacity={0.7}
+                >
+                    <Text style={styles.createAccountButtonText}>{t('registration')}</Text>
+                </TouchableOpacity>
 
                 <Text style={styles.copyright}>© {new Date().getFullYear()} UNBC. All rights reserved.</Text>
             </SafeAreaView >
@@ -99,16 +109,34 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         justifyContent: 'space-between',
     },
+    languageContainer: {
+        position: 'absolute',
+        top: 10,
+        right: 20,
+        zIndex: 1000,
+    },
     orText: {
         textAlign: 'center',
         marginVertical: 10,
         color: '#666',
+    },
+    createAccountButton: {
+        backgroundColor: '#007AFF',
+        padding: 15,
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    createAccountButtonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: '600',
     },
     titleContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: 30,
+        marginTop: 50,
     },
     logo: {
         width: 40,

@@ -14,6 +14,7 @@ import AddScreen from './Screens/AddScreen';
 import ActivityScreen from './Screens/ActivityScreen';
 import SettingsScreen from './Screens/SettingsScreen';
 import LogoutScreen from './Screens/LogoutScreen';
+import CreateAccount from './Screens/CreateAccount';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -25,7 +26,7 @@ function ProfileDrawerNavigator() {
       initialRouteName="ProfileMain"
       screenOptions={{
         drawerPosition: 'right',
-        headerShown: true,
+        headerShown: true,  
         drawerStyle: { width: 250 },
         drawerType: 'front',
         overlayColor: 'transparent',
@@ -34,10 +35,9 @@ function ProfileDrawerNavigator() {
       <Drawer.Screen 
         name="ProfileMain" 
         component={ProfileScreen}
-        title="Profile"
         options={{
           drawerIcon: () => null,
-          title: "Profile",
+          title: 'Profile',
         }}
       />
       <Drawer.Screen name="Settings" component={SettingsScreen} />
@@ -80,6 +80,7 @@ export default function App() {
         <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={LoginForm} />
           <Stack.Screen name="MainTabs" component={BottomTabNavigator} />
+          <Stack.Screen name="CreateAccount" component={CreateAccount} />
         </Stack.Navigator>
       </NavigationContainer>
     </EmailProvider>
