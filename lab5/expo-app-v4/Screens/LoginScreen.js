@@ -11,6 +11,7 @@ import CustomButton from '../components/CustomButton';
 import LanguageSelector from '../components/LanguageSelector';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useEmailStore } from '../contexts/EmailContext';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const alert = (title, message) => {
     if (typeof window !== 'undefined' && window.alert) {
@@ -21,9 +22,9 @@ const alert = (title, message) => {
 export default function LoginForm() {
     const navigation = useNavigation();
     const { setEmail } = useEmailStore();
+    const { language, setLanguage } = useLanguage();
     const [emailInput, setEmailInput] = useState('');
     const [password, setPassword] = useState('');
-    const [language, setLanguage] = useState('en');
 
     const handleSubmit = () => {
         if (!emailInput || !password) {

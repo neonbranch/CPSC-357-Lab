@@ -1,7 +1,48 @@
 # Expo Camera & ImagePicker Implementation
 
+## How to Run the Project
+
+Follow these steps to set up and run the Lab 5 project:
+
+### Step 1: Download the Repository
+
+Download the project from GitHub:
+- Repository URL: https://github.com/neonbranch/CPSC-357-Lab
+
+### Step 2: Extract and Navigate
+
+1. Extract the downloaded files
+2. Navigate to the `lab5` folder
+3. Then navigate to the `expo-app-v4` folder
+
+```bash
+cd lab5
+cd expo-app-v4
+```
+
+### Step 3: Install Dependencies
+
+Install all required npm packages:
+
+```bash
+npm install
+```
+
+**Required packages for this lab:**
+- `expo-camera`
+- `expo-image-picker`
+
+### Step 4: Start the Expo Development Server
+
+Run the Expo development server:
+
+```bash
+npx expo start
+```
+
 This project demonstrates the implementation of **expo-camera** and **expo-image-picker** for capturing photos and selecting images from the device gallery.
 
+<<<<<<< HEAD
 ## 📦 Installation
 
 Install the required packages:
@@ -9,6 +50,8 @@ Install the required packages:
 ```bash
 npm install 
 ```
+=======
+>>>>>>> b3f0a0b (task)
 
 ## 📋 Dependencies
 
@@ -214,11 +257,15 @@ const pickImage = async () => {
 ## 📝 File Structure
 
 ```
-expo-app-v4/
-├── components/
-│   └── camera.js          # Camera component
-├── Screens/
-│   └── PostScreen.js      # Post screen with camera & image picker
+lab5/
+├── expo-app-v4/
+│   ├── components/
+│   │   └── camera.js          # Camera component
+│   ├── Screens/
+│   │   └── PostScreen.js      # Post screen with camera & image picker
+│   ├── navigator/
+│   │   └── BottomTabNavigator.js  # Tab navigator
+│   └── package.json
 └── README.md              # This file
 ```
 

@@ -28,7 +28,7 @@ export default function PostScreen() {
         });
 
         console.log(result.assets[0]);
-        //setPostText(result.assets[0].fileName || 'Untitled');
+        setPostText(result.assets[0].mimeType || 'Untitled');
 
         if (!result.canceled) {
             setSelectedImage(result.assets[0].uri);
@@ -38,6 +38,7 @@ export default function PostScreen() {
     const handleCameraPhoto = (photoUri) => {
         setSelectedImage(photoUri);
         setShowCamera(false);
+        setPostText(photoUri);
     };
 
     const handlePost = () => {

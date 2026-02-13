@@ -1,11 +1,11 @@
-import { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../components/Header';
 import LanguageSelector from '../components/LanguageSelector';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export default function SettingsScreen() {
-    const [language, setLanguage] = useState('en');
+    const { language, setLanguage } = useLanguage();
 
     return (
         <SafeAreaProvider>

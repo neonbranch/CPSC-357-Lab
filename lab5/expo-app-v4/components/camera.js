@@ -52,8 +52,8 @@ export default function Camera({ onPhotoTaken }) {
                 facing={facing}
                 ref={cameraRef}
                 style={styles.camera}
-                // zoom={4.0}
-                // flash='on'
+                 zoom={4.0}
+                 flash='on'
                 // enableTorch={true}
                 // active={true}
                 // ratio='1:1'
@@ -62,6 +62,10 @@ export default function Camera({ onPhotoTaken }) {
                 <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
                     <Ionicons name="swap-horizontal-outline" size={28} color="white" />
                     <Text style={styles.text}>Flip Camera</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
+                    <Ionicons name="swap-horizontal-outline" size={28} color="white" />
+                    <Text style={styles.text}>Do nothing</Text>
                 </TouchableOpacity>
                 <View style={styles.captureContainer}>
                     <TouchableOpacity style={styles.captureButton} onPress={takePicture}>
