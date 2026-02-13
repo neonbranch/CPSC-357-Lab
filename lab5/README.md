@@ -7,7 +7,7 @@ This project demonstrates the implementation of **expo-camera** and **expo-image
 Install the required packages:
 
 ```bash
-npm install expo-camera expo-image-picker
+npm install 
 ```
 
 ## 📋 Dependencies
