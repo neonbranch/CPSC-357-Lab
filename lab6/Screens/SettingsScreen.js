@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import Header from '../components/Header';
 import LanguageSelector from '../components/LanguageSelector';
 import {
     registerForPushNotificationsAsync,
@@ -23,7 +22,8 @@ export default function SettingsScreen() {
             await sendTestNotification();
             Alert.alert('Sent!', 'A test notification will appear in ~2 seconds.');
         } catch (error) {
-            Alert.alert('Error', 'Failed to send test notification.');
+            const message = error instanceof Error ? error.message : 'Failed to send test notification.';
+            Alert.alert('Error', message);
         }
     };
 
