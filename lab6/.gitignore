@@ -45,5 +45,5 @@ yarn-error.*
 
 # Firebase / service account credentials
 credentials.json
-credentials/*.json
 google-services.json
+unbc-app-28805-firebase-adminsdk-fbsvc-17e8c97809.json
