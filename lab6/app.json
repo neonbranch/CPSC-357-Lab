@@ -35,6 +35,12 @@
           "color": "#ffffff"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "f1d29df7-8315-45fa-9854-d817070e408a"
+      }
+    },
+    "owner": "sharif2008"
   }
 }
