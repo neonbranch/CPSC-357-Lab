@@ -1,97 +1,162 @@
 # Expo Push Notifications Fix Guide (SDK 53+)
 
-This guide covers everything you need to know about fixing Expo Push Notification issues, Firebase native configuration, and common errors when testing on physical Android devices.
+This guide is for **Android physical device testing** with `expo-notifications` in Expo SDK 53+ (this project is on SDK 54). It focuses on the most common failure points when moving from **Expo Go** → **development builds (EAS)**.
+
+## Quick glossary (so errors make sense)
+
+- **Local notification**: Scheduled on-device (works in Expo Go). Example: the “Send Test Notification” button.
+- **Remote push notification**: Sent from a server → delivered via FCM/APNs (Android remote push does **not** work in Expo Go on SDK 53+).
+- **Expo Push Token**: What your app gets from Expo (`ExponentPushToken[...]`). You use it to send a push via Expo’s push service.
+- **FCM (Firebase Cloud Messaging)**: Android’s push transport (Google Play Services required).
 
 ---
 
-## Part 1: Initializing Your Expo Project (UUID Error)
+## Step 0 — Confirm what you’re testing
 
-If you get:  
-`Error encountered while fetching Expo token... "projectId": Invalid uuid`  
+1. In the app, use the **Settings** screen:
+   - If the local test notification shows up in ~2 seconds, your notification UI + permissions are OK.
+   - If fetching the Expo push token fails, follow the steps below.
+2. Use a **physical Android device** (emulators/simulators won’t generate real push tokens).
 
-This happens because Expo's servers are checking if the UUID in your `app.json` is registered in their cloud database.
+---
 
-**To get a real Expo Project ID**, run:
+## Step 1 — Fix: `"projectId": Invalid uuid` (or missing projectId)
+
+Error example:
+`Error encountered while fetching Expo token... "projectId": Invalid uuid`
+
+Cause: Expo checks that your `expo.extra.eas.projectId` in `app.json` is a **real EAS project**.
+
+Fix (creates/links a real EAS project and updates `app.json`):
+
 ```bash
 npx eas-cli init
 ```
 
-*(When you run this command, it will prompt you to log in to EAS using your email or username:)*
-```text
-? Log in to EAS with email or username (exit and run eas login --help to see other login options)
-√ Email or username 
-password
-```
-*(Once logged in, it will generate a valid project on Expo's servers and magically insert a real, working `projectId` into your `app.json`.)*
+Notes:
+- You will be prompted to log in to EAS.
+- After init, confirm `app.json` contains:
+  - `expo.extra.eas.projectId` (a UUID)
+  - correct `expo.owner` (your Expo username)
 
 ---
 
-## Part 2: Working Around the SDK 53 Expo Go Limitation 
+## Step 2 — Fix: Remote push does not work in Expo Go (SDK 53+)
 
-If you see this warning:
-> *Android Push notifications (remote notifications) functionality provided by expo-notifications was removed from Expo Go with the release of SDK 53. Use a development build instead of Expo Go.*
+Warning you might see:
+> Android Push notifications (remote notifications) functionality provided by expo-notifications was removed from Expo Go with the release of SDK 53. Use a development build instead of Expo Go.
 
-Starting with SDK 53, **Expo disabled remote push notifications inside the standard "Expo Go" app** on Android. Testing remote notifications inside the normal Expo Go app will fail. 
+Cause: On Android SDK 53+, **Expo Go can’t receive remote pushes**.
 
-You must compile a "Custom Development Build" of your app.
+Fix: Build and install a **development build** APK and run the app with the dev client.
 
-### Building an APK via Cloud Build (No Android Studio required)
-To build an APK for your physical Android device, run:
+Build (cloud):
+
 ```bash
 npx eas-cli build --profile development --platform android
 ```
-*(When you run this for the first time, it will ask to generate an `eas.json` file. Press Enter to say Yes. Next, it will prompt you if you want to generate a new Android Keystore for signing the app. Choose 'Yes' to this as well.)*
 
-Once the build finishes, it gives you a QR code to download and install the custom `.apk` onto your physical phone.
+Run the metro server for the dev build:
 
-**To run the installed APK on your phone, you must start your local server using:**
 ```bash
 npx expo start --dev-client
 ```
 
 ---
 
-## Part 3: Fixing Physical Device Native Firebase Errors
+## Step 3 — Fix: `Default FirebaseApp is not initialized` (Android dev build)
 
-Because you are no longer using Expo Go, your standalone `.apk` does not have Google's secret Firebase configurations baked into it by default. 
+If token fetch fails with something like “Default FirebaseApp is not initialized”, the APK was built without Firebase’s Android config.
 
-### Error: "Default FirebaseApp is not initialized"
-If you build the APK and the token fetch fails with this error, it means the EAS Cloud Build created your APK without a `google-services.json` file.
+Cause: The EAS build did not embed `google-services.json`.
 
-**How to Fix:**
-1. Go to the **Firebase Console** (console.firebase.google.com).
-2. Create a Project.
-3. Click the **Android icon** to add an Android app.
-4. Set the **Android package name** exactly as it is in your `app.json` (e.g., `com.unbc.app`) and click Register App.
-5. Download the `google-services.json` file and place it in the root folder of your Expo project.
-6. Open your `app.json` and tell Expo to use it:
+Fix:
+
+1. In Firebase Console:
+   - Create (or open) a Firebase project.
+   - Add an **Android app** with **package name** exactly matching `app.json`:
+     - This project’s package is `com.unbc.app`.
+   - Download `google-services.json`.
+2. Put `google-services.json` in the project root (same folder as `app.json`).
+3. Update `app.json` to point Expo to the file:
+
 ```json
+{
+  "expo": {
     "android": {
       "googleServicesFile": "./google-services.json",
-      "package": "com.unbc.app",
-      ...
+      "package": "com.unbc.app"
     }
+  }
+}
 ```
-7. **Rebuild the APK** using the `eas build` command from Part 2. The Expo builder will natively embed the Firebase initialization for you.
+
+4. Rebuild the APK (Step 2). Native configs are baked in at build time.
+
+Security note: `google-services.json` isn’t as sensitive as a service account key, but you still generally don’t want it in public repos.
 
 ---
 
-## Part 4: Fixing Push Delivery Errors (FCM V1)
+## Step 4 — Fix: Expo can’t deliver pushes (FCM V1 credentials)
 
-### Error: "Unable to retrieve the FCM server key for the recipient's app"
-If you get this error when you try to actually send a notification, it means the phone successfully got the token, but Expo's servers don't have the legal permission to talk to your Firebase project to deliver the message.
+Error example (when sending a push):
+“Unable to retrieve the FCM server key for the recipient’s app”
 
-**How to Fix:**
-1. Go to your **Firebase Console**.
-2. Click the **Gear Icon** (Project settings) in the top left -> **Service accounts** tab.
-3. Click **Generate new private key**. This downloads a Service Account JSON file (e.g., `unbc-app-firebase-adminsdk...json`).
-4. Go to the **Expo Dashboard** (expo.dev) on the web and log in.
-5. Click your project -> **Credentials** (left sidebar) -> **Android**.
-6. At the top right, select the build profile you used (e.g., `development`).
-7. Scroll down to **Push Notifications (FCM V1)**. 
-8. Click **Add FCM V1 Service Account** and upload/drag-and-drop the JSON file you downloaded from Firebase.
+Meaning: Your phone got an Expo push token, but Expo’s servers aren’t authorized to talk to your Firebase project to deliver Android pushes.
 
-Once uploaded, Expo will immediately be able to push notifications through your Firebase instance.
+Fix (FCM V1):
+
+1. Firebase Console → Project settings → **Service accounts**.
+2. Generate a **new private key** (downloads a service account JSON file).
+3. Expo dashboard (expo.dev) → your project → **Credentials** → **Android**.
+4. Under **Push Notifications (FCM V1)**, upload the service account JSON.
+
+Security note: Treat the service account JSON as a secret. Don’t commit it to git.
+
+---
+
+## Quick troubleshooting checklist
+
+- Token is `null` on Settings screen: verify you’re on a physical device and granted notification permission.
+- Remote push never arrives: you must be using a dev build (not Expo Go) and have FCM V1 configured in Expo.
+- Huawei / no Play Store device: FCM may not work without Google Play Services.
+- Network issues (school/public Wi‑Fi): try cellular data or a different network.
+
+---
+
+## Part 5: Testing Push Notifications using Expo Push Tool
+
+Once you have successfully uploaded your FCM V1 Service Account Key, you can finally test delivering a remote push notification!
+
+1. Open your physical phone, launch your app, and go to the **Settings page** (or wherever you placed the push token request button).
+2. Press the button to generate the token. 
+3. Copy that exact token (it should look something like `ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]`).
+4. On your computer, open your web browser and go to the official Expo Push Tool: **[https://expo.dev/notifications](https://expo.dev/notifications)**
+5. In the **To (Expo push token)** field, paste your `ExponentPushToken`.
+6. Fill out the **Message Title** and **Message Body** with anything you want.
+7. Scroll down and click **Send Notification**.
+8. You should immediately see the notification pop up on your phone! *(Note: Depending on how your code handles foreground notifications, you may need to minimize your app to the Android home screen to see the system visual pop-up.)*
+
+---
+
+## Part 6: Understanding `eas.json` Configuration
+
+When we ran the build command, Expo generated an `eas.json` file. By default, EAS creates Android "AAB" (Android App Bundle) files which are meant for the Google Play Store, but cannot be easily installed directly to a physical phone for testing.
+
+We explicitly opened `eas.json` and added `"buildType": "apk"` to force Expo to give us an installable APK instead:
+
+```json
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
+    }
+  }
+```
+This is a critical detail to remember: if you ever delete `eas.json` or reset it, you must add `buildType: apk` back, otherwise Expo will give you an AAB file that you cannot scan and download via QR code!
 
 ---
 
