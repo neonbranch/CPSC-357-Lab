@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "242936365302",
+    "project_id": "unbc-app-28805",
+    "storage_bucket": "unbc-app-28805.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:242936365302:android:1e72287e654863c2962cd7",
+        "android_client_info": {
+          "package_name": "com.unbc.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0pPSRjmXhD_b7xFfqG1KCfDsAoiMeefs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
