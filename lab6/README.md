@@ -36,34 +36,27 @@ Callbacks are functions passed as arguments to other functions that get executed
 
 ### Basic Example
 
-Here's a simple example using callbacks with the `fetch` API:
+Here's a simple example demonstrating the callback pattern:
 
 ```javascript
-// Traditional callback approach - wrapping fetch in a callback pattern
+// Function that uses a callback
 function fetchUserData(userId, callback) {
-  // Make the API request
-  fetch(`https://api.example.com/users/${userId}`)
-    .then(response => {
-      // Check if response is OK
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      // Parse JSON response
-      return response.json();
-    })
-    .then(data => {
-      // Success - call callback with no error (null) and the data
-      callback(null, data);
-    })
-    .catch(error => {
-      // Error - call callback with error and no data (null)
-      callback(error, null);
-    });
+  // Simulate an asynchronous operation (like an API call)
+  setTimeout(() => {
+    // Simulate success or error
+    if (userId > 0) {
+      // Success: call callback with null error and data
+      callback(null, { id: userId, name: 'John Doe', email: 'john@example.com' });
+    } else {
+      // Error: call callback with error and null data
+      callback(new Error('Invalid user ID'), null);
+    }
+  }, 1000); // Simulate 1 second delay
 }
 
 // Use the function with a callback
 fetchUserData(123, function(error, userData) {
-  // This function runs when the request completes
+  // This function runs when the operation completes
   if (error) {
     // Handle error
     console.error('Error:', error);
@@ -76,8 +69,8 @@ fetchUserData(123, function(error, userData) {
 
 **How it works:**
 1. `fetchUserData` is called with a `userId` and a `callback` function
-2. The function makes an API request using `fetch`
-3. When the request completes, it calls the `callback` function with the result
+2. The function performs an asynchronous operation (simulated with `setTimeout`)
+3. When the operation completes, it calls the `callback` function with the result
 4. The callback receives two parameters: `(error, data)`
 5. If successful: `callback(null, data)` - error is null, data contains the result
 6. If failed: `callback(error, null)` - error contains the error, data is null
@@ -86,7 +79,7 @@ fetchUserData(123, function(error, userData) {
 - Callbacks are functions passed to other functions
 - The callback function always receives two parameters: `(error, data)`
 - This pattern is called "error-first callbacks" - error always comes first
-- The `fetch` API is wrapped in a callback pattern to demonstrate callbacks
+- The callback is executed when the asynchronous operation completes
 
 ### The Problem: Callback Hell
 
@@ -122,47 +115,10 @@ fetchUserData(userId, function(error, user) {
 - Error handling is scattered
 - Difficult to debug
 
-### Better Callback Pattern
 
 Following the [callbackhell.com](https://callbackhell.com/) guidelines:
 
-```javascript
-// ✅ BETTER: Named functions, keep code shallow
-function handleUserData(error, user) {
-  if (error) {
-    console.error('Error fetching user:', error);
-    return;
-  }
-  fetchUserPosts(user.id, handleUserPosts);
-}
 
-function handleUserPosts(error, posts) {
-  if (error) {
-    console.error('Error fetching posts:', error);
-    return;
-  }
-  fetchPostComments(posts[0].id, handlePostComments);
-}
-
-function handlePostComments(error, comments) {
-  if (error) {
-    console.error('Error fetching comments:', error);
-    return;
-  }
-  console.log('Comments:', comments);
-}
-
-// Start the chain
-fetchUserData(userId, handleUserData);
-```
-
-**Benefits:**
-- Functions have names (easier debugging)
-- Code is flatter (less nesting)
-- Each function handles one thing
-- Easier to read and maintain
-
----
 
 ## API Calls with Promises
 
