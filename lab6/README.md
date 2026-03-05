@@ -36,28 +36,57 @@ Callbacks are functions passed as arguments to other functions that get executed
 
 ### Basic Example
 
+Here's a simple example using callbacks with the `fetch` API:
+
 ```javascript
-// Traditional callback approach
+// Traditional callback approach - wrapping fetch in a callback pattern
 function fetchUserData(userId, callback) {
+  // Make the API request
   fetch(`https://api.example.com/users/${userId}`)
-    .then(response => response.json())
+    .then(response => {
+      // Check if response is OK
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      // Parse JSON response
+      return response.json();
+    })
     .then(data => {
-      callback(null, data); // Success: pass null for error, data as second param
+      // Success - call callback with no error (null) and the data
+      callback(null, data);
     })
     .catch(error => {
-      callback(error, null); // Error: pass error as first param
+      // Error - call callback with error and no data (null)
+      callback(error, null);
     });
 }
 
-// Using the callback
+// Use the function with a callback
 fetchUserData(123, function(error, userData) {
+  // This function runs when the request completes
   if (error) {
+    // Handle error
     console.error('Error:', error);
-    return;
+  } else {
+    // Handle success
+    console.log('User data:', userData);
   }
-  console.log('User data:', userData);
 });
 ```
+
+**How it works:**
+1. `fetchUserData` is called with a `userId` and a `callback` function
+2. The function makes an API request using `fetch`
+3. When the request completes, it calls the `callback` function with the result
+4. The callback receives two parameters: `(error, data)`
+5. If successful: `callback(null, data)` - error is null, data contains the result
+6. If failed: `callback(error, null)` - error contains the error, data is null
+
+**Key Points:**
+- Callbacks are functions passed to other functions
+- The callback function always receives two parameters: `(error, data)`
+- This pattern is called "error-first callbacks" - error always comes first
+- The `fetch` API is wrapped in a callback pattern to demonstrate callbacks
 
 ### The Problem: Callback Hell
 
