@@ -4,13 +4,117 @@ A comprehensive guide to making API calls in React Native, progressing from call
 
 ## Table of Contents
 
-1. [Introduction](#introduction)
-2. [API Calls with Callbacks](#api-calls-with-callbacks)
-3. [API Calls with Promises](#api-calls-with-promises)
-4. [Modern Way: Async/Await](#modern-way-asyncawait)
-5. [Error Handling with Try/Catch](#error-handling-with-trycatch)
-6. [Best Practices](#best-practices)
-7. [Real Examples from This Project](#real-examples-from-this-project)
+1. [Installation Guide](#installation-guide)
+2. [Introduction](#introduction)
+3. [API Calls with Callbacks](#api-calls-with-callbacks)
+4. [API Calls with Promises](#api-calls-with-promises)
+5. [Modern Way: Async/Await](#modern-way-asyncawait)
+6. [Error Handling with Try/Catch](#error-handling-with-trycatch)
+7. [Best Practices](#best-practices)
+8. [Real Examples from This Project](#real-examples-from-this-project)
+
+---
+
+## Installation Guide
+
+### How to Run the Project
+
+Follow these steps to set up and run the Lab 6 project:
+
+#### Step 1: Download the Repository
+
+Download the project from GitHub:
+
+**Repository URL**: https://github.com/neonbranch/CPSC-357-Lab
+
+#### Step 2: Extract and Navigate
+
+1. Extract the downloaded files
+2. Navigate to the `lab6` folder
+
+```bash
+cd lab6
+```
+
+#### Step 3: Install Dependencies
+
+Install all required npm packages:
+
+```bash
+npm install
+```
+
+**Required packages for this lab:**
+- `@react-navigation/native`
+- `@react-navigation/native-stack`
+- `@react-navigation/bottom-tabs`
+- `@react-navigation/drawer`
+- `expo-notifications`
+- `expo-device`
+- `expo-constants`
+- `react-native-safe-area-context`
+- `react-native-screens`
+- `react-native-gesture-handler`
+
+#### Step 4: Start the Backend API Server
+
+**Important**: This project requires a backend API server to be running. Make sure you have the backend server running before starting the Expo app.
+
+1. Navigate to your backend API directory (if separate from this project)
+2. Start the backend server (typically on port 3000):
+
+```bash
+# Example: If your backend is in a separate directory
+cd ../backend-api
+npm install
+npm start
+```
+
+**Backend API Requirements:**
+- The API should be running on `http://localhost:3000` (or your configured IP address)
+- Update the `API_BASE_URL` in `constants/api.js` to match your backend server address
+- For Android Emulator, use: `http://10.0.2.2:3000/api`
+- For iOS Simulator, use: `http://localhost:3000/api`
+- For Physical Device, use your computer's IP: `http://YOUR_IP_ADDRESS:3000/api`
+
+**To find your IP address:**
+- **Windows**: Run `ipconfig` in Command Prompt and look for IPv4 Address
+- **Mac/Linux**: Run `ifconfig` in Terminal and look for inet address
+
+#### Step 5: Start the Expo Development Server
+
+Run the Expo development server:
+
+```bash
+npx expo start
+```
+
+This will start the Metro bundler and display a QR code. You can:
+- Press `a` to open on Android emulator
+- Press `i` to open on iOS simulator
+- Scan the QR code with Expo Go app on your physical device
+
+**Note**: Make sure your device/emulator and computer are on the same network when using a physical device.
+
+#### Step 6: Configure API Base URL
+
+Before testing API calls, make sure to update the API base URL in `constants/api.js`:
+
+```javascript
+// constants/api.js
+export const API_BASE_URL = 'http://YOUR_IP_ADDRESS:3000/api';
+```
+
+Replace `YOUR_IP_ADDRESS` with your actual IP address or use the appropriate address for your development environment.
+
+---
+
+**This project demonstrates:**
+- Making API calls with async/await
+- User authentication with JWT tokens
+- Fetching and displaying user profile data
+- Error handling and loading states
+- React Context API for state management
 
 ---
 

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -82,7 +82,11 @@ export default function ProfileScreen() {
 
         {/* Show profile data when loaded successfully */}
         {!loading && !error && profile && (
-          <View style={styles.content}>
+          <ScrollView 
+            style={styles.scrollView}
+            contentContainerStyle={styles.content}
+            showsVerticalScrollIndicator={true}
+          >
             {/* User Avatar */}
             <View style={styles.avatarContainer}>
               <Image
@@ -122,7 +126,7 @@ export default function ProfileScreen() {
               <Ionicons name="lock-closed-outline" size={20} color="#fff" />
               <Text style={styles.changePasswordButtonText}>Change Password</Text>
             </TouchableOpacity>
-          </View>
+          </ScrollView>
         )}
       </SafeAreaView>
     </SafeAreaProvider>
@@ -134,10 +138,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  content: {
+  scrollView: {
     flex: 1,
+  },
+  content: {
     padding: 20,
     alignItems: 'center',
+    paddingBottom: 40,
   },
   avatarContainer: {
     marginBottom: 30,
