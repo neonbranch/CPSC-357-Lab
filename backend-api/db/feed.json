@@ -1,0 +1,112 @@
+[
+  {
+    "id": "1",
+    "avatar": "https://i.pravatar.cc/150?img=1",
+    "name": "Sarah Johnson",
+    "username": "nature_lover",
+    "image": "https://picsum.photos/400/400?random=1",
+    "caption": "Beautiful sunset view",
+    "text": "Just captured this amazing sunset! The colors were absolutely breathtaking. Nature never fails to amaze me. #sunset #nature #photography",
+    "datetime": "2026-01-15T18:30:00Z"
+  },
+  {
+    "id": "2",
+    "avatar": "https://i.pravatar.cc/150?img=2",
+    "name": "Michael Chen",
+    "username": "mountain_explorer",
+    "image": "https://picsum.photos/400/400?random=2",
+    "caption": "Mountain landscape",
+    "text": "Hiking through the mountains today. The view from the top was worth every step! Fresh air and stunning vistas. #hiking #mountains #adventure",
+    "datetime": "2026-01-15T14:20:00Z"
+  },
+  {
+    "id": "3",
+    "avatar": "https://i.pravatar.cc/150?img=3",
+    "name": "Emma Rodriguez",
+    "username": "city_dweller",
+    "image": "https://picsum.photos/400/400?random=3",
+    "caption": "City skyline at night",
+    "text": "The city never sleeps! Love the energy and lights of downtown at night. There's something magical about urban landscapes after dark. #citylife #night #urban",
+    "datetime": "2026-01-15T10:15:00Z"
+  },
+  {
+    "id": "4",
+    "avatar": "https://i.pravatar.cc/150?img=4",
+    "name": "David Thompson",
+    "username": "ocean_waves",
+    "image": "https://picsum.photos/400/400?random=4",
+    "caption": "Ocean waves",
+    "text": "Spent the day at the beach. The sound of waves is so calming. Perfect weather for a relaxing day by the ocean. #beach #ocean #relaxation",
+    "datetime": "2026-01-14T16:45:00Z"
+  },
+  {
+    "id": "5",
+    "avatar": "https://i.pravatar.cc/150?img=5",
+    "name": "Lisa Anderson",
+    "username": "forest_walker",
+    "image": "https://picsum.photos/400/400?random=5",
+    "caption": "Forest path",
+    "text": "Morning walk through the forest. The peace and quiet here is unmatched. Nature therapy at its finest! #forest #walking #nature #peace",
+    "datetime": "2026-01-14T08:30:00Z"
+  },
+  {
+    "id": "6",
+    "avatar": "https://i.pravatar.cc/150?img=6",
+    "name": "James Wilson",
+    "username": "desert_adventurer",
+    "image": "https://picsum.photos/400/400?random=6",
+    "caption": "Desert dunes",
+    "text": "Exploring the desert today. The vastness and beauty of the dunes is incredible. Hot but worth it! #desert #adventure #travel",
+    "datetime": "2026-01-13T12:00:00Z"
+  },
+  {
+    "id": "7",
+    "avatar": "https://i.pravatar.cc/150?img=7",
+    "name": "Olivia Martinez",
+    "username": "snow_enthusiast",
+    "image": "https://picsum.photos/400/400?random=7",
+    "caption": "Snowy mountains",
+    "text": "Winter wonderland! The snow-covered mountains look absolutely pristine. Perfect day for skiing and snowboarding. #winter #snow #mountains #skiing",
+    "datetime": "2026-01-13T09:20:00Z"
+  },
+  {
+    "id": "8",
+    "avatar": "https://i.pravatar.cc/150?img=8",
+    "name": "Ryan Brown",
+    "username": "tropical_paradise",
+    "image": "https://picsum.photos/400/400?random=8",
+    "caption": "Tropical beach",
+    "text": "Paradise found! Crystal clear water and white sandy beaches. This is what dreams are made of. #tropical #beach #paradise #vacation",
+    "datetime": "2026-01-12T15:10:00Z"
+  },
+  {
+    "id": "9",
+    "avatar": "https://i.pravatar.cc/150?img=9",
+    "name": "Sophia Lee",
+    "username": "urban_photographer",
+    "image": "https://picsum.photos/400/400?random=9",
+    "caption": "Urban street",
+    "text": "Street photography is my passion. Capturing the essence of city life, one frame at a time. Every street tells a story. #streetphotography #urban #city",
+    "datetime": "2026-01-12T11:30:00Z"
+  },
+  {
+    "id": "10",
+    "avatar": "https://i.pravatar.cc/150?img=10",
+    "name": "Daniel Taylor",
+    "username": "countryside_lover",
+    "image": "https://picsum.photos/400/400?random=10",
+    "caption": "Countryside field",
+    "text": "Escape to the countryside. Rolling fields, fresh air, and tranquility. Sometimes the simple things in life are the most beautiful. #countryside #nature #peaceful",
+    "datetime": "2026-01-11T13:45:00Z"
+  },
+  {
+    "id": "1772684002975",
+    "avatar": "https://example.com/avatar.jpg",
+    "name": "John Doe",
+    "username": "johndoe",
+    "image": "https://example.com/image.jpg",
+    "caption": "My first post!",
+    "text": "This is the description",
+    "datetime": "2026-03-05T04:13:22.975Z"
+  }
+]
