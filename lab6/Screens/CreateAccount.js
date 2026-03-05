@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Image, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { useEmailStore } from '../contexts/EmailContext';
 import CustomButton from '../components/CustomButton';
+import { registerUser } from '../services/authService';
 
 const alert = (title, message) => {
     if (typeof window !== 'undefined' && window.alert) {
@@ -13,28 +13,23 @@ const alert = (title, message) => {
 
 export default function CreateAccount() {
     const navigation = useNavigation();
-    const { setEmail } = useEmailStore();
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const [name, setName] = useState('');
     const [email, setEmailInput] = useState('');
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const handleCreateAccount = () => {
+    const handleCreateAccount = async () => {
         // Validate all fields are filled
-        if (!firstName || !lastName || !email || !phone || !password || !confirmPassword) {
+        if (!name || !email || !phone || !password || !confirmPassword) {
             alert('Error', 'Please fill in all fields');
             return;
         }
 
-        // Validate first name and last name
-        if (firstName.trim().length < 2) {
-            alert('Error', 'First name must be at least 2 characters');
-            return;
-        }
-        if (lastName.trim().length < 2) {
-            alert('Error', 'Last name must be at least 2 characters');
+        // Validate name
+        if (name.trim().length < 2) {
+            alert('Error', 'Name must be at least 2 characters');
             return;
         }
 
@@ -69,19 +64,23 @@ export default function CreateAccount() {
             return;
         }
 
-        // Account creation successful
-        alert('Success', `Account created successfully for ${firstName} ${lastName}!`);
-        // Save email to context
-        setEmail(email);
-        // Navigate to MainTabs
-        navigation.navigate('MainTabs');
-        // Reset form
-        setFirstName('');
-        setLastName('');
-        setEmailInput('');
-        setPhone('');
-        setPassword('');
-        setConfirmPassword('');
+        setLoading(true);
+        const result = await registerUser(email, password, name, phone);
+        
+        if (result.success) {
+            alert('Success', `Account created successfully for ${name}!`);
+            // Navigate back to Login screen
+            navigation.goBack();
+            // Reset form
+            setName('');
+            setEmailInput('');
+            setPhone('');
+            setPassword('');
+            setConfirmPassword('');
+        } else {
+            alert('Error', result.message);
+        }
+        setLoading(false);
     };
 
     return (
@@ -96,24 +95,14 @@ export default function CreateAccount() {
                         <Text style={styles.title}>Create Account</Text>
                     </View>
 
-                    <Text style={styles.label}>First Name</Text>
+                    <Text style={styles.label}>Name</Text>
                     <TextInput
                         style={styles.input}
-                        placeholder="Enter your first name"
+                        placeholder="Enter your full name"
                         keyboardType="default"
                         autoCapitalize="words"
-                        value={firstName}
-                        onChangeText={setFirstName}
-                    />
-
-                    <Text style={styles.label}>Last Name</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Enter your last name"
-                        keyboardType="default"
-                        autoCapitalize="words"
-                        value={lastName}
-                        onChangeText={setLastName}
+                        value={name}
+                        onChangeText={setName}
                     />
 
                     <Text style={styles.label}>Email</Text>
@@ -155,8 +144,12 @@ export default function CreateAccount() {
 
                     <CustomButton 
                         onPress={handleCreateAccount} 
-                        title="Create Account" 
+                        title={loading ? 'Creating Account...' : 'Create Account'}
+                        disabled={loading}
                     />
+                    {loading && (
+                        <ActivityIndicator size="small" color="#006400" style={{ marginTop: 10 }} />
+                    )}
 
                     <TouchableOpacity
                         style={styles.backButton}

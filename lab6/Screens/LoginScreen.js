@@ -5,12 +5,15 @@ import {
     TextInput,
     StyleSheet,
     Image,
+    ActivityIndicator,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CustomButton from '../components/CustomButton';
 import LanguageSelector from '../components/LanguageSelector';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { useEmailStore } from '../contexts/EmailContext';
+import { useAuth } from '../contexts/AuthContext';
+import { useLanguage } from '../contexts/LanguageContext';
+import { loginUser } from '../services/authService';
 
 const alert = (title, message) => {
     if (typeof window !== 'undefined' && window.alert) {
@@ -20,12 +23,13 @@ const alert = (title, message) => {
 
 export default function LoginForm() {
     const navigation = useNavigation();
-    const { setEmail } = useEmailStore();
+    const { login } = useAuth();
+    const { language, setLanguage } = useLanguage();
     const [emailInput, setEmailInput] = useState('');
     const [password, setPassword] = useState('');
-    const [language, setLanguage] = useState('en');
+    const [loading, setLoading] = useState(false);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!emailInput || !password) {
             alert('Error', 'Please fill in all fields');
             return;
@@ -45,15 +49,21 @@ export default function LoginForm() {
             alert('Error', 'Password must be between 5 and 20 characters');
             return;
         }
-        //Assume: Loging is successfull
-        alert('Success', `Welcome, ${emailInput}!`);
-        // Save email to context
-        setEmail(emailInput);
-        // Navigate to MainTabs (bottom tab navigator)
-        navigation.navigate('MainTabs');
-        // Reset form
-        setEmailInput('');
-        setPassword('');
+
+        setLoading(true);
+        const result = await loginUser(emailInput, password);
+        
+        if (result.success) {
+            login(result.data.user, result.data.token);
+            alert('Success', `Welcome, ${result.data.user.name || emailInput}!`);
+            navigation.navigate('MainTabs');
+            setEmailInput('');
+            setPassword('');
+        } else {
+            alert('Error', result.message);
+        }
+        
+        setLoading(false);
     };
     return (
         <SafeAreaProvider>
@@ -81,7 +91,14 @@ export default function LoginForm() {
                     onChangeText={setPassword}
                 />
 
-                <CustomButton onPress={handleSubmit} title="Login" />
+                <CustomButton 
+                    onPress={handleSubmit} 
+                    title={loading ? 'Logging in...' : 'Login'}
+                    disabled={loading}
+                />
+                {loading && (
+                    <ActivityIndicator size="small" color="#006400" style={{ marginTop: 10 }} />
+                )}
 
                 <Text style={styles.orText}>OR</Text>
 

@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { useEmailStore } from '../contexts/EmailContext';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Header({ title = 'Insta App' }) {
     const navigation = useNavigation();
-    const { email } = useEmailStore();
+    const { user } = useAuth();
 
     return (
         <View style={styles.header}>

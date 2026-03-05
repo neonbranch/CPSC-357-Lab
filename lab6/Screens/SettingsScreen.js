@@ -1,21 +1,45 @@
 import { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Platform } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import * as Device from 'expo-device';
 import LanguageSelector from '../components/LanguageSelector';
+import { useLanguage } from '../contexts/LanguageContext';
 import {
     registerForPushNotificationsAsync,
     sendTestNotification,
 } from '../utils/pushNotifications';
 
 export default function SettingsScreen() {
-    const [language, setLanguage] = useState('en');
+    const { language, setLanguage } = useLanguage();
     const [pushToken, setPushToken] = useState(null);
+    const [isRemotePushSupported, setIsRemotePushSupported] = useState(false);
 
     useEffect(() => {
         registerForPushNotificationsAsync().then((token) => {
             setPushToken(token);
         });
+
+        // Check Android-specific remote push support
+        checkRemotePushSupport();
     }, []);
+
+    const checkRemotePushSupport = () => {
+        if (Platform.OS === 'android') {
+            // Android: Remote push requires physical device and proper setup
+            // In Expo Go (SDK 53+), remote push doesn't work
+            // In development builds, remote push works
+            const isPhysicalDevice = Device.isDevice;
+            const isExpoGo = !Device.isDevice || __DEV__;
+            
+            // Remote push is supported on Android if:
+            // 1. It's a physical device
+            // 2. It's not running in Expo Go (development builds only)
+            setIsRemotePushSupported(isPhysicalDevice && !isExpoGo);
+        } else {
+            // iOS: Remote push works on physical devices
+            setIsRemotePushSupported(Device.isDevice);
+        }
+    };
 
     const handleTestNotification = async () => {
         try {
@@ -44,6 +68,25 @@ export default function SettingsScreen() {
                         <View style={styles.section}>
                             <Text style={styles.sectionTitle}>Push Notifications</Text>
 
+                            {/* Device and Platform Info */}
+                            <View style={styles.infoContainer}>
+                                <Text style={styles.infoText}>
+                                    Platform: {Platform.OS === 'ios' ? 'iOS' : 'Android'}
+                                </Text>
+                                <Text style={styles.infoText}>
+                                    Device: {Device.isDevice ? 'Physical Device' : 'Simulator/Emulator'}
+                                </Text>
+                                {Platform.OS === 'android' && (
+                                    <View style={styles.androidWarning}>
+                                        <Text style={styles.warningText}>
+                                            ⚠️ Android Remote Push: {isRemotePushSupported 
+                                                ? 'Supported (Development Build)' 
+                                                : 'Not Supported (Use Development Build, not Expo Go)'}
+                                        </Text>
+                                    </View>
+                                )}
+                            </View>
+
                             <View style={styles.tokenContainer}>
                                 <Text style={styles.tokenLabel}>Your Push Token:</Text>
                                 <Text style={styles.tokenValue} selectable>
@@ -55,8 +98,17 @@ export default function SettingsScreen() {
                                 style={styles.testButton}
                                 onPress={handleTestNotification}
                             >
-                                <Text style={styles.testButtonText}>Send Test Notification</Text>
+                                <Text style={styles.testButtonText}>Send Test Notification (Local)</Text>
                             </TouchableOpacity>
+
+                            {Platform.OS === 'android' && !isRemotePushSupported && (
+                                <View style={styles.androidInfo}>
+                                    <Text style={styles.androidInfoText}>
+                                        Note: Remote push notifications on Android require a development build. 
+                                        Local notifications work in Expo Go.
+                                    </Text>
+                                </View>
+                            )}
                         </View>
                     </View>
                 </ScrollView>
@@ -120,5 +172,38 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         fontWeight: '600',
+    },
+    infoContainer: {
+        backgroundColor: '#f0f0f0',
+        borderRadius: 8,
+        padding: 12,
+        marginBottom: 15,
+    },
+    infoText: {
+        fontSize: 14,
+        color: '#666',
+        marginBottom: 4,
+    },
+    androidWarning: {
+        backgroundColor: '#fff3cd',
+        borderRadius: 6,
+        padding: 10,
+        marginTop: 8,
+    },
+    warningText: {
+        fontSize: 13,
+        color: '#856404',
+        fontWeight: '500',
+    },
+    androidInfo: {
+        marginTop: 15,
+        padding: 12,
+        backgroundColor: '#e7f3ff',
+        borderRadius: 8,
+    },
+    androidInfoText: {
+        fontSize: 12,
+        color: '#004085',
+        lineHeight: 18,
     },
 });

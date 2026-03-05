@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { useEmailStore } from '../contexts/EmailContext';
+import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
 
 const alert = (title, message) => {
@@ -13,10 +13,10 @@ const alert = (title, message) => {
 
 export default function LogoutScreen() {
     const navigation = useNavigation();
-    const { setEmail, email } = useEmailStore();
+    const { user, logout } = useAuth();
 
     const handleLogout = () => {
-        setEmail('');
+        logout();
         alert('Success', 'Logged out successfully');
         navigation.navigate('Login');
     };
@@ -26,7 +26,7 @@ export default function LogoutScreen() {
             <SafeAreaView style={styles.container}>
                 <View style={styles.content}>
                     <Text style={styles.text}>Are you sure you want to logout?</Text>
-                    <Text style={styles.email}>Logged in as: {email}</Text>
+                    <Text style={styles.email}>Logged in as: {user?.email || 'N/A'}</Text>
                     <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
                         <Text style={styles.logoutButtonText}>Logout</Text>
                     </TouchableOpacity>
