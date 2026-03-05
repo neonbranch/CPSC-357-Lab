@@ -16,7 +16,23 @@ const validateRegister = [
     .notEmpty()
     .withMessage('Name is required')
     .isLength({ min: 2 })
-    .withMessage('Name must be at least 2 characters long')
+    .withMessage('Name must be at least 2 characters long'),
+  body('phone')
+    .optional()
+    .trim()
+    .matches(/^[\d\s\-\(\)\+]+$/)
+    .withMessage('Phone number contains invalid characters')
+    .custom((value) => {
+      if (value && value.replace(/\D/g, '').length < 10) {
+        throw new Error('Phone number must contain at least 10 digits');
+      }
+      return true;
+    }),
+  body('avatar')
+    .optional()
+    .trim()
+    .isURL()
+    .withMessage('Avatar must be a valid URL')
 ];
 
 const validateLogin = [
@@ -75,6 +91,15 @@ const checkValidation = (req, res, next) => {
  *                 type: string
  *                 minLength: 2
  *                 example: John Doe
+ *               phone:
+ *                 type: string
+ *                 description: Phone number (optional)
+ *                 example: "+1 (250) 555-1234"
+ *               avatar:
+ *                 type: string
+ *                 format: uri
+ *                 description: User avatar URL (optional)
+ *                 example: "https://picsum.photos/400/400?random=1"
  *     responses:
  *       201:
  *         description: User registered successfully

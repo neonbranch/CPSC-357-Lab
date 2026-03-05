@@ -5,7 +5,7 @@ const { saveUser, findUserByEmail } = require('../utils/userStorage');
 const registerUser = async (req, res) => {
   try {
     console.log(`[API] ${new Date().toISOString()} - POST /api/auth/register - Email: ${req.body.email}`);
-    const { email, password, name } = req.body;
+    const { email, password, name, phone, avatar } = req.body;
 
     const existingUser = await findUserByEmail(email);
     if (existingUser) {
@@ -22,6 +22,8 @@ const registerUser = async (req, res) => {
       id: Date.now().toString(),
       email,
       name,
+      phone: phone || null,
+      avatar: avatar || null,
       password: hashedPassword,
       createdAt: new Date().toISOString()
     };
@@ -41,7 +43,9 @@ const registerUser = async (req, res) => {
         user: {
           id: user.id,
           email: user.email,
-          name: user.name
+          name: user.name,
+          phone: user.phone,
+          avatar: user.avatar
         },
         token
       }
@@ -90,7 +94,9 @@ const loginUser = async (req, res) => {
         user: {
           id: user.id,
           email: user.email,
-          name: user.name
+          name: user.name,
+          phone: user.phone || null,
+          avatar: user.avatar || null
         },
         token
       }

@@ -110,6 +110,19 @@ const swaggerDefinition = {
             description: 'User display name',
             example: 'John Doe'
           },
+          phone: {
+            type: 'string',
+            nullable: true,
+            description: 'User phone number (optional)',
+            example: '+1 (250) 555-1234'
+          },
+          avatar: {
+            type: 'string',
+            format: 'uri',
+            nullable: true,
+            description: 'User avatar URL (optional)',
+            example: 'https://picsum.photos/400/400?random=1'
+          },
           createdAt: {
             type: 'string',
             format: 'date-time',
@@ -217,6 +230,14 @@ const swaggerDefinition = {
     {
       name: 'Feeds',
       description: 'Feed (post) management endpoints'
+    },
+    {
+      name: 'Users',
+      description: 'User profile management endpoints'
+    },
+    {
+      name: 'Push Notifications',
+      description: 'Push notification device registration and sending endpoints'
     },
     {
       name: 'Health',

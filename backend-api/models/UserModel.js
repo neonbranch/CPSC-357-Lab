@@ -13,12 +13,14 @@
 class UserModel {
   /**
    * Constructor - Create a new UserModel instance
-   * @param {Object} data - User data (id, email, name, password, createdAt)
+   * @param {Object} data - User data (id, email, name, phone, avatar, password, createdAt)
    */
   constructor(data) {
     this.id = data.id;
     this.email = data.email;
     this.name = data.name;
+    this.phone = data.phone || null;
+    this.avatar = data.avatar || null;
     this.password = data.password;  // ⚠️ Never send this in responses!
     this.createdAt = data.createdAt || new Date().toISOString();
   }
@@ -49,7 +51,7 @@ class UserModel {
 
   /**
    * Validate user data before saving
-   * Checks if email, name, and password are valid
+   * Checks if email, name, phone, and password are valid
    * @param {Object} data - User data to validate
    * @returns {Object} { valid: boolean, errors: Array }
    */
@@ -64,6 +66,18 @@ class UserModel {
     // Check name
     if (!data.name || data.name.trim().length < 2) {
       errors.push('Name must be at least 2 characters');
+    }
+    
+    // Check phone (optional, but if provided should be valid format)
+    if (data.phone && data.phone.trim().length > 0) {
+      // Basic phone validation: should contain only digits, spaces, dashes, parentheses, and +
+      const phoneRegex = /^[\d\s\-\(\)\+]+$/;
+      if (!phoneRegex.test(data.phone.trim())) {
+        errors.push('Phone number contains invalid characters');
+      }
+      if (data.phone.trim().replace(/\D/g, '').length < 10) {
+        errors.push('Phone number must contain at least 10 digits');
+      }
     }
     
     // Check password (only if provided)

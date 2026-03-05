@@ -2,6 +2,25 @@
 
 This is a simple REST API built with Node.js and Express. It uses JSON files as a database to store users and feeds.
 
+## ⚡ Quick Start for Expo Go Users
+
+**Important:** When connecting from Expo Go on a physical device, use your computer's IP address instead of `localhost`.
+
+1. **Find your IP address:**
+   - **Windows:** Open Command Prompt → Run `ipconfig` → Look for "IPv4 Address"
+   - **Mac/Linux:** Open Terminal → Run `ifconfig` → Look for "inet" address
+
+2. **Use IP in your Expo app:**
+   ```javascript
+   // ❌ Won't work from physical device
+   const API_URL = 'http://localhost:3000';
+   
+   // ✅ Use your computer's IP
+   const API_URL = 'http://192.168.1.100:3000'; // Replace with your IP
+   ```
+
+3. **Make sure:** Both your phone and computer are on the same Wi-Fi network!
+
 ## 📁 Project Structure
 
 ```
@@ -57,6 +76,22 @@ npm run dev
 
 ### 3. Test the API
 The server runs on `http://localhost:3000`
+
+**📱 For Expo Go Users:** When connecting from a mobile device, use your computer's IP address instead of `localhost`. See the "Connecting from Expo Go App" section below for details.
+When connecting from Expo Go on a physical device, use your computer's IP address instead of `localhost`:
+
+**Find your IP address:**
+- **Windows:** Open Command Prompt and run `ipconfig`, look for "IPv4 Address"
+- **Mac/Linux:** Open Terminal and run `ifconfig` or `ip addr`, look for your network interface IP
+
+**Example:**
+- Instead of: `http://localhost:3000`
+- Use: `http://192.168.1.100:3000` (replace with your actual IP)
+
+**Important Notes:**
+- Make sure your mobile device and computer are on the same Wi-Fi network
+- The IP address might change if you reconnect to Wi-Fi
+- If connection fails, check your firewall settings to allow port 3000
 
 ## 📡 API Endpoints
 
@@ -236,18 +271,23 @@ All test users have the same password: `test123`
 ### Register User (Public)
 ```bash
 POST http://localhost:3000/api/auth/register
+# For Expo Go: Replace localhost with your IP (e.g., http://192.168.1.100:3000)
 Content-Type: application/json
 
 {
   "email": "user@example.com",
   "password": "password123",
-  "name": "John Doe"
+  "name": "John Doe",
+  "phone": "+1 (250) 555-1234"
 }
 ```
+
+**Note:** The `phone` field is optional. If not provided, it will be set to `null`.
 
 ### Login (Public)
 ```bash
 POST http://localhost:3000/api/auth/login
+# For Expo Go: Replace localhost with your IP (e.g., http://192.168.1.100:3000)
 Content-Type: application/json
 
 {
@@ -259,6 +299,7 @@ Content-Type: application/json
 ### Create Feed (Protected - Requires Token)
 ```bash
 POST http://localhost:3000/api/feeds
+# For Expo Go: Replace localhost with your IP (e.g., http://192.168.1.100:3000)
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
@@ -275,6 +316,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ### Update Feed (Protected - Requires Token)
 ```bash
 PUT http://localhost:3000/api/feeds/123
+# For Expo Go: Replace localhost with your IP (e.g., http://192.168.1.100:3000)
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
@@ -286,12 +328,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ### Delete Feed (Protected - Requires Token)
 ```bash
 DELETE http://localhost:3000/api/feeds/123
+# For Expo Go: Replace localhost with your IP (e.g., http://192.168.1.100:3000)
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
 ### Get All Feeds (Public - No Token Required)
 ```bash
 GET http://localhost:3000/api/feeds
+# For Expo Go: Replace localhost with your IP (e.g., http://192.168.1.100:3000)
 ```
 
 ## 📚 Swagger API Documentation
@@ -303,12 +347,13 @@ The easiest way to test the API is using Swagger UI:
 1. **Start the server:**
    ```bash
    npm start
+   # or for development with auto-reload:
+   npm run dev
    ```
 
 2. **Open Swagger UI:**
-   ```
-   http://localhost:3000/api-docs
-   ```
+   - On your computer: `http://localhost:3000/api-docs`
+   - From mobile device: `http://YOUR_IP_ADDRESS:3000/api-docs` (replace YOUR_IP_ADDRESS with your computer's IP)
 
 3. **Get a Token:**
    - Scroll to **Authentication** section
@@ -339,13 +384,59 @@ The easiest way to test the API is using Swagger UI:
 
 ### Using Swagger UI (Recommended)
 
-The easiest way to test the API is using Swagger UI at `http://localhost:3000/api-docs`. 
+The easiest way to test the API is using Swagger UI:
+- **On your computer:** `http://localhost:3000/api-docs`
+- **From mobile device (Expo Go):** `http://YOUR_IP_ADDRESS:3000/api-docs`
+
 See the Swagger API Documentation section above for details.
+
+### 🔌 Connecting from Expo Go App
+
+**Important:** When testing from Expo Go on a physical device, you must use your computer's IP address instead of `localhost`.
+
+**Steps:**
+1. **Find your computer's IP address:**
+   ```bash
+   # Windows
+   ipconfig
+   # Look for "IPv4 Address" under your active network adapter
+   
+   # Mac/Linux
+   ifconfig
+   # or
+   ip addr
+   # Look for inet address under your active network interface
+   ```
+
+2. **Use the IP address in your Expo app:**
+   ```javascript
+   // ❌ This won't work from a physical device
+   const API_URL = 'http://localhost:3000';
+   
+   // ✅ Use your computer's IP address instead
+   const API_URL = 'http://192.168.1.100:3000'; // Replace with your IP
+   ```
+
+3. **Make sure:**
+   - Your phone and computer are on the **same Wi-Fi network**
+   - Your firewall allows connections on port 3000
+   - The server is running (`npm start` or `npm run dev`)
+
+**Example IP addresses:**
+- `http://192.168.1.100:3000`
+- `http://192.168.0.105:3000`
+- `http://10.0.0.50:3000`
+
+**Troubleshooting:**
+- Can't connect? Check that both devices are on the same Wi-Fi
+- Still not working? Temporarily disable firewall to test
+- IP changed? Run `ipconfig` or `ifconfig` again to get the new IP
 
 ### Testing with cURL
 
 ```bash
 # Login and get token
+# Replace localhost with your IP if testing from another device
 curl -X POST http://localhost:3000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{
@@ -365,6 +456,8 @@ curl -X POST http://localhost:3000/api/feeds \
   }'
 ```
 
+**Note:** For Expo Go, replace `localhost` with your computer's IP address (e.g., `http://192.168.1.100:3000`)
+
 ### Testing with Postman
 
 1. Create a new request
@@ -376,9 +469,14 @@ curl -X POST http://localhost:3000/api/feeds \
 ### Testing with JavaScript (Fetch API)
 
 ```javascript
+// For Expo Go: Use your computer's IP address instead of localhost
+const API_URL = __DEV__ 
+  ? 'http://192.168.1.100:3000'  // Replace with your computer's IP
+  : 'http://localhost:3000';     // For web/development
+
 const token = 'your-token-here';
 
-fetch('http://localhost:3000/api/feeds', {
+fetch(`${API_URL}/api/feeds`, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -394,6 +492,8 @@ fetch('http://localhost:3000/api/feeds', {
 .then(response => response.json())
 .then(data => console.log(data));
 ```
+
+**For Expo Go:** Always use your computer's IP address (e.g., `192.168.1.100`) instead of `localhost`
 
 ## 🛡️ Security Features
 

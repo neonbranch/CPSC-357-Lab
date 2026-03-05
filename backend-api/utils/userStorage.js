@@ -117,10 +117,71 @@ const getAllUsers = async () => {
   return await readUsers();
 };
 
+/**
+ * Update a user's information
+ * @param {string} id - User ID to update
+ * @param {Object} updates - Object with fields to update (name, phone, email)
+ * @returns {Object|null} Updated user object or null if not found
+ */
+const updateUser = async (id, updates) => {
+  const users = await readUsers();
+  
+  // Find the user index
+  const userIndex = users.findIndex(user => user.id === id);
+  
+  // If user not found, return null
+  if (userIndex === -1) {
+    return null;
+  }
+  
+  // Update only the provided fields (don't overwrite password or id)
+  const allowedFields = ['name', 'phone', 'email', 'avatar'];
+  allowedFields.forEach(field => {
+    if (updates[field] !== undefined) {
+      users[userIndex][field] = updates[field];
+    }
+  });
+  
+  // Save updated users array
+  await writeUsers(users);
+  
+  // Return the updated user
+  return users[userIndex];
+};
+
+/**
+ * Update a user's password
+ * @param {string} id - User ID to update
+ * @param {string} newPassword - New hashed password
+ * @returns {Object|null} Updated user object or null if not found
+ */
+const updateUserPassword = async (id, newPassword) => {
+  const users = await readUsers();
+  
+  // Find the user index
+  const userIndex = users.findIndex(user => user.id === id);
+  
+  // If user not found, return null
+  if (userIndex === -1) {
+    return null;
+  }
+  
+  // Update password
+  users[userIndex].password = newPassword;
+  
+  // Save updated users array
+  await writeUsers(users);
+  
+  // Return the updated user
+  return users[userIndex];
+};
+
 // Export functions so other files can use them
 module.exports = {
   saveUser,           // Save a new user
   findUserByEmail,    // Find user by email
   findUserById,       // Find user by ID
-  getAllUsers          // Get all users
+  getAllUsers,        // Get all users
+  updateUser,         // Update user information
+  updateUserPassword  // Update user password
 };

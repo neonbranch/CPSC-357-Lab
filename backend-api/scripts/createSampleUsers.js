@@ -12,6 +12,8 @@ const users = [
     id: Date.now().toString(),
     email: 'student@unbc.ca',
     name: 'UNBC Student',
+    phone: '+1 (250) 555-0100',
+    avatar: 'https://picsum.photos/400/400?random=1',
     password: 'test123',
     createdAt: new Date().toISOString()
   },
@@ -19,6 +21,8 @@ const users = [
     id: (Date.now() + 1).toString(),
     email: 'john.doe@unbc.ca',
     name: 'John Doe',
+    phone: '+1 (250) 555-0101',
+    avatar: 'https://picsum.photos/400/400?random=2',
     password: 'test123',
     createdAt: new Date().toISOString()
   },
@@ -26,6 +30,8 @@ const users = [
     id: (Date.now() + 2).toString(),
     email: 'jane.smith@unbc.ca',
     name: 'Jane Smith',
+    phone: '+1 (250) 555-0102',
+    avatar: 'https://picsum.photos/400/400?random=3',
     password: 'test123',
     createdAt: new Date().toISOString()
   }
@@ -41,6 +47,8 @@ async function createUsers() {
           id: user.id,
           email: user.email,
           name: user.name,
+          phone: user.phone,
+          avatar: user.avatar,
           password: hashedPassword,
           createdAt: user.createdAt
         };

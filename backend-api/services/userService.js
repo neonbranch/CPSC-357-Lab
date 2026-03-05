@@ -107,7 +107,7 @@ class UserService {
 
   /**
    * Create a new user
-   * @param {Object} userData - User data (email, name, password)
+   * @param {Object} userData - User data (email, name, phone, password)
    * @returns {Object} Response object with success status and created user
    */
   async createUser(userData) {
@@ -151,6 +151,117 @@ class UserService {
       return !!user;  // Convert to boolean (true if user exists)
     } catch (error) {
       return false;  // On error, assume user doesn't exist
+    }
+  }
+
+  /**
+   * Update user information
+   * @param {string} id - User ID to update
+   * @param {Object} updates - Fields to update (name, phone, email, avatar)
+   * @returns {Object} Response object with success status and updated user
+   */
+  async updateUser(id, updates) {
+    try {
+      // If email is being updated, check if it's already taken by another user
+      if (updates.email) {
+        const existingUser = await userStorage.findUserByEmail(updates.email);
+        if (existingUser && existingUser.id !== id) {
+          return {
+            success: false,
+            message: 'Email is already taken by another user'
+          };
+        }
+      }
+
+      // Validate the updates
+      const validation = UserModel.validate(updates);
+      if (!validation.valid) {
+        return {
+          success: false,
+          message: 'Validation failed',
+          errors: validation.errors
+        };
+      }
+
+      // Update the user
+      const updatedUser = await userStorage.updateUser(id, updates);
+      
+      if (!updatedUser) {
+        return {
+          success: false,
+          message: 'User not found'
+        };
+      }
+
+      return {
+        success: true,
+        message: 'User updated successfully',
+        data: new UserModel(updatedUser).toResponse()
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Error updating user',
+        error: error.message
+      };
+    }
+  }
+
+  /**
+   * Change user password
+   * @param {string} id - User ID
+   * @param {string} oldPassword - Current password (for verification)
+   * @param {string} newPassword - New password
+   * @returns {Object} Response object with success status
+   */
+  async changePassword(id, oldPassword, newPassword) {
+    try {
+      // Get the user
+      const user = await userStorage.findUserById(id);
+      
+      if (!user) {
+        return {
+          success: false,
+          message: 'User not found'
+        };
+      }
+
+      // Verify old password
+      const bcrypt = require('bcryptjs');
+      const isOldPasswordValid = await bcrypt.compare(oldPassword, user.password);
+      
+      if (!isOldPasswordValid) {
+        return {
+          success: false,
+          message: 'Current password is incorrect'
+        };
+      }
+
+      // Validate new password
+      if (!newPassword || newPassword.length < 6) {
+        return {
+          success: false,
+          message: 'New password must be at least 6 characters long'
+        };
+      }
+
+      // Hash the new password
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+      // Update password
+      await userStorage.updateUserPassword(id, hashedPassword);
+
+      return {
+        success: true,
+        message: 'Password changed successfully'
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Error changing password',
+        error: error.message
+      };
     }
   }
 }
