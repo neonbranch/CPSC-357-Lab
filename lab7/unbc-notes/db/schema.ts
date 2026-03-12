@@ -9,6 +9,7 @@ export const notes = sqliteTable(NOTES_TABLE, {
   id: text('id').primaryKey(),
   title: text('title').notNull(),
   content: text('content').notNull(),
+  tag: text('tag'),
   createdAt: text('createdAt').notNull(),
   updatedAt: text('updatedAt').notNull(),
 });

@@ -22,6 +22,7 @@ export const CREATE_NOTES_TABLE_SQL = `
     id TEXT PRIMARY KEY,
     title TEXT NOT NULL,
     content TEXT NOT NULL,
+    tag TEXT,
     createdAt TEXT NOT NULL,
     updatedAt TEXT NOT NULL
   );
