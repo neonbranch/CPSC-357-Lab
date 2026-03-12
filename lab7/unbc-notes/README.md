@@ -6,7 +6,10 @@ A simple mobile Notes app built with React Native and Expo using TypeScript.
 
 - **Profile Management**: Create and edit your profile (Name, Email, Profession)
 - **Notes Management**: Create, read, update, and delete notes
-- **Local Storage**: All data stored locally using AsyncStorage
+- **Platform-Specific Storage**: 
+  - Native (iOS/Android): SQLite with Drizzle ORM
+  - Web: AsyncStorage
+- **Auto-Refresh**: Note details automatically reload after updates
 - **Clean UI**: Simple, minimal, and student-friendly design
 
 ## Tech Stack
@@ -14,14 +17,15 @@ A simple mobile Notes app built with React Native and Expo using TypeScript.
 - React Native with Expo
 - TypeScript
 - React Navigation (Native Stack)
-- AsyncStorage for local storage
+- **Native Storage**: SQLite with Drizzle ORM (iOS/Android)
+- **Web Storage**: AsyncStorage (Web platform)
 - Expo Vector Icons
+- Expo SQLite
 
 ## Project Structure
 
 ```
-expo-app-v6/
-├── app/                    # (Not used - using React Navigation instead)
+unbc-notes/
 ├── components/             # Reusable components
 │   ├── Header.tsx
 │   ├── NoteCard.tsx
@@ -30,15 +34,27 @@ expo-app-v6/
 │   ├── ProfileScreen.tsx
 │   ├── HomeScreen.tsx
 │   ├── NoteDetailsScreen.tsx
-│   ├── CreateEditNoteScreen.tsx
+│   ├── CreateNoteScreen.tsx
+│   ├── EditNoteScreen.tsx
 │   └── SettingsScreen.tsx
 ├── navigator/             # Navigation setup
 │   └── RootStackNavigator.tsx
-├── storage/               # AsyncStorage utilities
+├── storage/               # Platform-specific storage implementations
 │   ├── profileStorage.ts
-│   └── notesStorage.ts
+│   ├── notesStorage.ts
+│   ├── notesStorage.native.ts  # SQLite with Drizzle (Native)
+│   └── notesStorage.web.ts     # AsyncStorage (Web)
+├── db/                    # Database configuration
+│   ├── database.ts
+│   ├── dbconfig.ts
+│   └── schema.ts
 ├── service/               # Business logic
-│   └── noteService.ts
+│   ├── noteService.ts
+│   └── profileService.ts
+├── utils/                 # Utility functions
+│   ├── alertUtils.ts
+│   ├── dateUtils.ts
+│   └── profileUtils.ts
 ├── types/                 # TypeScript type definitions
 │   └── index.ts
 ├── assets/                # Images and icons
@@ -51,7 +67,7 @@ expo-app-v6/
 
 1. Navigate to the project directory:
 ```bash
-cd lab7/expo-app-v6
+cd unbc-notes
 ```
 
 2. Install dependencies:
@@ -88,14 +104,26 @@ npm run web
    - Floating + button to create new note
    - Settings icon in header
 5. **Note Details**: View full note with edit and delete options
-6. **Create/Edit Note**: Form to create or edit notes
-7. **Settings**: View and edit profile, reset profile option
+   - Automatically refreshes when returning from edit screen
+6. **Create Note**: Form to create new notes
+7. **Edit Note**: Form to edit existing notes
+8. **Settings**: View and edit profile, reset profile option
 
 ## Storage
 
-- Profile data stored in AsyncStorage with key: `@unbc_notes_profile`
-- Notes stored in AsyncStorage with key: `@unbc_notes_list`
+The app uses platform-specific storage implementations:
+
+### Native (iOS/Android)
+- **Notes**: SQLite database with Drizzle ORM
+- **Profile**: AsyncStorage with key: `@unbc_notes_profile`
 - All data persists locally on device
+
+### Web
+- **Notes**: AsyncStorage with key: `@unbc_notes_list`
+- **Profile**: AsyncStorage with key: `@unbc_notes_profile`
+- All data persists in browser's local storage
+
+The Metro bundler automatically resolves the correct storage implementation at runtime based on the platform.
 
 ## Notes Data Structure
 
@@ -127,8 +155,11 @@ interface Profile {
 - ✅ Empty state handling
 - ✅ Delete confirmation dialogs
 - ✅ Smooth navigation
-- ✅ Local storage with AsyncStorage
+- ✅ Platform-specific storage (SQLite for native, AsyncStorage for web)
+- ✅ Auto-refresh note details after updates
 - ✅ TypeScript for type safety
+- ✅ Date formatting utilities
+- ✅ Alert utilities for user feedback
 
 ## Requirements
 
@@ -139,7 +170,9 @@ interface Profile {
 
 ## Notes
 
-- This app does NOT use SQLite or Drizzle ORM
-- All data is stored in AsyncStorage
+- **Native platforms (iOS/Android)**: Uses SQLite with Drizzle ORM for notes storage
+- **Web platform**: Uses AsyncStorage for notes storage
+- The app uses Metro bundler's platform-specific file resolution (`.native.ts` and `.web.ts`)
+- Profile data is always stored in AsyncStorage across all platforms
 - The app follows a simple academic/lab-style design
-- Perfect for learning React Native and Expo basics
+- Perfect for learning React Native, Expo, and platform-specific implementations

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import { RootStackParamList, Note } from '../types';
@@ -28,16 +28,23 @@ export default function NoteDetailsScreen() {
   const [note, setNote] = useState<Note | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadNote();
-  }, [noteId]);
-
-  const loadNote = async () => {
+  const loadNote = useCallback(async () => {
     setLoading(true);
     const loadedNote = await noteService.getNoteById(noteId);
     setNote(loadedNote);
     setLoading(false);
-  };
+  }, [noteId]);
+
+  useEffect(() => {
+    loadNote();
+  }, [loadNote]);
+
+  // Reload note when screen comes into focus (e.g., after returning from edit screen)
+  useFocusEffect(
+    useCallback(() => {
+      loadNote();
+    }, [loadNote])
+  );
 
   const handleEdit = () => {
     if (note) {
