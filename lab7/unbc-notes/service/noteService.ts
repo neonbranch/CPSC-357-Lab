@@ -2,7 +2,8 @@
  * Note Service
  * 
  * This file provides business logic for managing notes.
- * It uses the notesStorage to interact with the SQLite database.
+ * It uses the appropriate storage (SQLite for Android/iOS, AsyncStorage for Web)
+ * based on the platform.
  */
 
 import { Note } from '../types';
