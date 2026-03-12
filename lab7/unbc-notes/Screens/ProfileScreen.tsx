@@ -15,7 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import { RootStackParamList } from '../types';
-import { profileStorage } from '../storage/profileStorage';
+import { profileService } from '../service/profileService';
 // Import utility functions from utils folder
 import {
   PROFESSION_OPTIONS,
@@ -62,18 +62,15 @@ export default function ProfileScreen() {
     setLoading(true);
 
     // Try to save the profile
-    const success = await profileStorage.saveProfile({
-      name: name.trim(),
-      email: fullEmail,
-      dateOfBirth: '', // Empty string since date of birth is removed
-      profession: profession.trim(),
-    });
+    const success = await profileService.saveProfileFields(name, emailPrefix, profession);
 
     // Hide loading state
     setLoading(false);
 
-    // If save was successful, go to the Home screen
+    // If save was successful, show success message and go to the Home screen
     if (success) {
+      showAlert('Success', 'Profile saved successfully!');
+      // Navigate to Home screen after saving
       navigation.replace('Home');
     } else {
       // If save failed, show an error message

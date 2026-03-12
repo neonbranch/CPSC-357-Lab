@@ -7,7 +7,7 @@ import NoteDetailsScreen from '../Screens/NoteDetailsScreen';
 import CreateNoteScreen from '../Screens/CreateNoteScreen';
 import EditNoteScreen from '../Screens/EditNoteScreen';
 import SettingsScreen from '../Screens/SettingsScreen';
-import { profileStorage } from '../storage/profileStorage';
+import { profileService } from '../service/profileService';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -20,7 +20,7 @@ export default function RootStackNavigator() {
   }, []);
 
   const checkProfile = async () => {
-    const profile = await profileStorage.getProfile();
+    const profile = await profileService.getProfile();
     setInitialRoute(profile ? 'Home' : 'Profile');
     setIsLoading(false);
   };

@@ -4,7 +4,7 @@ A simple mobile Notes app built with React Native and Expo using TypeScript.
 
 ## Features
 
-- **Profile Management**: Create and edit your profile (Name, Email, Date of Birth, Profession)
+- **Profile Management**: Create and edit your profile (Name, Email, Profession)
 - **Notes Management**: Create, read, update, and delete notes
 - **Local Storage**: All data stored locally using AsyncStorage
 - **Clean UI**: Simple, minimal, and student-friendly design
@@ -115,7 +115,6 @@ interface Note {
 interface Profile {
   name: string;
   email: string;
-  dateOfBirth: string;
   profession: string;
 }
 ```

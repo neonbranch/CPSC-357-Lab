@@ -1,19 +1,40 @@
+/**
+ * Note Service
+ * 
+ * This file provides business logic for managing notes.
+ * It uses the notesStorage to interact with the SQLite database.
+ */
+
 import { Note } from '../types';
 import { notesStorage } from '../storage/notesStorage';
 
 export const noteService = {
+  /**
+   * Gets all notes from the database
+   * @returns Array of all notes, sorted by most recently updated
+   */
   async getAllNotes(): Promise<Note[]> {
     return await notesStorage.getAllNotes();
   },
 
+  /**
+   * Gets a single note by its ID
+   * @param id - The note ID to find
+   * @returns The note if found, null otherwise
+   */
   async getNoteById(id: string): Promise<Note | null> {
-    const notes = await notesStorage.getAllNotes();
-    return notes.find(note => note.id === id) || null;
+    return await notesStorage.getNoteById(id);
   },
 
+  /**
+   * Creates a new note
+   * @param title - The note title
+   * @param content - The note content
+   * @returns The created note if successful, null otherwise
+   */
   async createNote(title: string, content: string): Promise<Note | null> {
     try {
-      const notes = await notesStorage.getAllNotes();
+      // Create a new note object with unique ID
       const newNote: Note = {
         id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
         title: title.trim(),
@@ -22,8 +43,8 @@ export const noteService = {
         updatedAt: new Date().toISOString(),
       };
       
-      notes.push(newNote);
-      const success = await notesStorage.saveNotes(notes);
+      // Save the note to the database
+      const success = await notesStorage.saveNote(newNote);
       return success ? newNote : null;
     } catch (e) {
       console.error('Error creating note:', e);
@@ -31,24 +52,32 @@ export const noteService = {
     }
   },
 
+  /**
+   * Updates an existing note
+   * @param id - The note ID to update
+   * @param title - The new title
+   * @param content - The new content
+   * @returns The updated note if successful, null otherwise
+   */
   async updateNote(id: string, title: string, content: string): Promise<Note | null> {
     try {
-      const notes = await notesStorage.getAllNotes();
-      const noteIndex = notes.findIndex(note => note.id === id);
+      // Get the existing note to preserve createdAt
+      const existingNote = await notesStorage.getNoteById(id);
       
-      if (noteIndex === -1) {
+      if (!existingNote) {
         return null;
       }
 
+      // Create updated note object
       const updatedNote: Note = {
-        ...notes[noteIndex],
+        ...existingNote,
         title: title.trim(),
         content: content.trim(),
         updatedAt: new Date().toISOString(),
       };
 
-      notes[noteIndex] = updatedNote;
-      const success = await notesStorage.saveNotes(notes);
+      // Update the note in the database
+      const success = await notesStorage.updateNote(updatedNote);
       return success ? updatedNote : null;
     } catch (e) {
       console.error('Error updating note:', e);
@@ -56,11 +85,14 @@ export const noteService = {
     }
   },
 
+  /**
+   * Deletes a note
+   * @param id - The note ID to delete
+   * @returns true if successful, false otherwise
+   */
   async deleteNote(id: string): Promise<boolean> {
     try {
-      const notes = await notesStorage.getAllNotes();
-      const filteredNotes = notes.filter(note => note.id !== id);
-      return await notesStorage.saveNotes(filteredNotes);
+      return await notesStorage.deleteNote(id);
     } catch (e) {
       console.error('Error deleting note:', e);
       return false;

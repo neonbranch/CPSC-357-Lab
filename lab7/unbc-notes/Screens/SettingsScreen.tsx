@@ -15,7 +15,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import { RootStackParamList, Profile } from '../types';
 import Header from '../components/Header';
-import { profileStorage } from '../storage/profileStorage';
+import { profileService } from '../service/profileService';
 // Import utility functions from utils folder
 import {
   PROFESSION_OPTIONS,
@@ -60,7 +60,7 @@ export default function SettingsScreen() {
    * Loads the user's profile from storage and fills in the form fields
    */
   const loadProfile = async () => {
-    const loadedProfile = await profileStorage.getProfile();
+    const loadedProfile = await profileService.getProfile();
     if (loadedProfile) {
       setProfile(loadedProfile);
       setName(loadedProfile.name);
@@ -95,12 +95,7 @@ export default function SettingsScreen() {
     setLoading(true);
 
     // Try to save the profile
-    const success = await profileStorage.saveProfile({
-      name: name.trim(),
-      email: fullEmail,
-      dateOfBirth: '', // Empty string since date of birth is removed
-      profession: profession.trim(),
-    });
+    const success = await profileService.saveProfileFields(name, emailPrefix, profession);
 
     // Hide loading state
     setLoading(false);
@@ -128,7 +123,7 @@ export default function SettingsScreen() {
           text: 'Reset',
           style: 'destructive',
           onPress: async () => {
-            const success = await profileStorage.clearProfile();
+            const success = await profileService.clearProfile();
             if (success) {
               navigation.reset({
                 index: 0,
@@ -146,7 +141,7 @@ export default function SettingsScreen() {
   if (!profile) {
     return (
       <SafeAreaView style={styles.container}>
-        <Header />
+        <Header showBack={true} />
         <View style={styles.centerContent}>
           <Text>Loading profile...</Text>
         </View>
@@ -157,7 +152,7 @@ export default function SettingsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header />
+      <Header showBack={true} />
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Profile Information</Text>

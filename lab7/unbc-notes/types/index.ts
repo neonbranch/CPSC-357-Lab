@@ -1,7 +1,6 @@
 export interface Profile {
   name: string;
   email: string;
-  dateOfBirth: string;
   profession: string;
 }
 
