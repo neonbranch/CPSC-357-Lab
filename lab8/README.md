@@ -328,7 +328,7 @@ Outputs:
 
 ---
 
-## HTML test report (classroom-friendly)
+## HTML test report
 
 Run:
 
