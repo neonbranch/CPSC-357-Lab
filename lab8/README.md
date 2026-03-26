@@ -349,12 +349,36 @@ Output file:
 
 ---
 
-## What to explain in class (suggested flow)
+## Today’s outline
 
-1. Show the app (`npx expo start`)
-2. Open a test (example: `__tests__/Counter.test.tsx`)
-3. Explain **Arrange / Act / Assert**
-4. Run tests (`npm test`)
-5. Show coverage (`npm run test:coverage`)
-6. Show HTML report (`npm run test:html`)
+### Class tasks
+
+1. Run the app
+   - `npx expo start`
+
+2. Confirm Jest is included in this project (team check)
+   - Open `package.json` and find the scripts:
+     - `test`, `test:coverage`, `test:html`
+   - Open `jest.config.js` and confirm:
+     - `preset: 'jest-expo'`
+     - HTML reporter writes to `test-reports/test-report.html`
+   - Open `jest.setup.js` and confirm matchers are loaded.
+
+3. Run the existing tests (baseline)
+   - `npm test`
+
+4. As a team, pick one component to test
+   - Suggested: `src/components/Counter.tsx`
+
+5. Test that component (write or extend one test)
+   - Open the matching test file in `__tests__/` (example: `__tests__/Counter.test.tsx`)
+   - Add one small test using:
+     - `render(...)`
+     - `getByTestId(...)`
+     - `fireEvent.press(...)`
+     - `expect(...)`
+
+6. Generate reports
+   - Console coverage: `npm run test:coverage`
+   - HTML report: `npm run test:html` → open `test-reports/test-report.html`
 
