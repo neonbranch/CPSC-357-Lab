@@ -1,6 +1,6 @@
 # React Native (Expo) Testing Demo — Jest + @testing-library/react-native
 
-This is a small **Expo-based React Native** sample app designed for classroom demos of:
+This is a small **Expo-based React Native** sample app designed for demos of:
 
 - **Unit tests** (pure functions + components)
 - **Integration tests** (App combines multiple parts)
@@ -30,7 +30,7 @@ cd lab8
 
 ---
 
-## Notes on test types (short + classroom-friendly)
+## Notes
 
 - **Unit test**
   - **Definition**: tests one small piece in isolation (a function or a single component).
