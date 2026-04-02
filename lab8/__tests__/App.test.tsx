@@ -9,7 +9,7 @@ describe('App integration tests', () => {
 
     expect(getByTestId('app-title')).toBeTruthy();
     expect(getByTestId('greeting-text')).toHaveTextContent(
-      'Hello, CPSC 357 Class! Welcome to React Native testing.',
+      'hi, CPSC 357 Class! Welcome to React Native testing.',
     );
     expect(getByTestId('sum-text')).toHaveTextContent('2 + 3 = 5');
     expect(getByTestId('counter-value')).toHaveTextContent('0');
