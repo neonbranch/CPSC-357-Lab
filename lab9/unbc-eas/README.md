@@ -14,21 +14,18 @@ cd unbc-eas
 npm install
 ```
 
-Start the dev server:
+Start the **Expo dev server** (from `unbc-eas` after `npm install`):
 
 ```bash
 npm start
 ```
 
-Run on a specific platform (with emulator/simulator or device):
+Equivalent:
 
 ```bash
-npm run android
-npm run ios
-npm run web
+npx expo start
 ```
 
-Use [Expo Go](https://expo.dev/go) or a **development build** (see EAS development client below) on a physical device.
 
 ---
 
@@ -96,7 +93,7 @@ npx expo start --dev-client
 
 | Task | Commands |
 |------|----------|
-| Local dev | `cd unbc-eas` → `npm install` → `npm start` (or `npm run android` / `ios` / `web`) |
+| Local dev | `cd unbc-eas` → `npm install` → `npm start` or `npx expo start` (or `npm run android` / `ios` / `web`) |
 | EAS setup | `eas login` → `eas init` → `eas build:configure` |
 | Android production | `eas build -p android --profile production` |
 | iOS production | `eas build -p ios --profile production` |
